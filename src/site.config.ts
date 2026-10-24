@@ -31,10 +31,10 @@ export default defineSolitudeConfig({
     lightbox: 'fancybox',
     nav: {
       group: {
-        Project: [
+        切换站点: [
           {
-            name: 'Astro Solitude',
-            url: 'https://github.com/everfu/astro-solitude',
+            name: '落地页',
+            url: 'https://www.wyclab.com',
             icon: '/img/logo.png',
           },
         ],
@@ -48,16 +48,16 @@ export default defineSolitudeConfig({
     },
     aside: {
       home: { noSticky: 'about', Sticky: 'allInfo' },
-      post: { noSticky: 'about', Sticky: 'newestPost,allInfo' },
+      post: { noSticky: '', Sticky: '' },
       page: { noSticky: 'about', Sticky: 'newestPost,allInfo' },
       my_card: {
-        description: 'An expressive Astro theme for your personal blog.',
-        content: 'Let your content take center stage.',
-        witty_words: ['Capture life in words', 'Create something with code'],
+        description: '望云川',
+        content: '凭栏望云，渡川而行',
+        witty_words: ['生活本不完美，幸甚有记录', 'Stay hungry, stay foolish'],
         information: [
           {
             name: 'GitHub',
-            url: 'https://github.com/everfu/astro-solitude',
+            url: 'https://github.com/wyclab',
             icon: 'fab fa-github',
           },
         ],

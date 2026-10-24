@@ -1,8 +1,11 @@
 ---
 import { cfg, config, t, url } from '../lib/site';
+import { getPosts, wordCount } from '../lib/content';
 const f = cfg.footer;
 const year = new Date().getFullYear();
 const start = new Date(cfg.aside.siteinfo.runtime).getFullYear();
+const posts = await getPosts();
+const totalWords = posts.reduce((n, p) => n + wordCount(p.body ?? ''), 0);
 ---
 
 <footer id="footer" class="tw:relative tw:flex tw:flex-col">
@@ -123,6 +126,13 @@ const start = new Date(cfg.aside.siteinfo.runtime).getFullYear();
           >
             {t('themeBy')} Solitude
           </a>
+          <span class="footer-stat">
+            <span>{posts.length} {t('posts')}</span>
+            <span class="sep">·</span>
+            <span>{t('uptime')} <span class="runtimeshow" /></span>
+            <span class="sep">·</span>
+            <span>{totalWords} {t('totalWords')}</span>
+          </span>
         </div>
       </div>
       <div class="footer-bar-right tw:[#footer-bar_&]:flex tw:[#footer-bar_&]:flex-row tw:[#footer-bar_&]:flex-wrap tw:[#footer-bar_&]:items-center">

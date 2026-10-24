@@ -2,7 +2,7 @@
   "site": {
     "name": {
       "class": "text",
-      "custom": "Solitude"
+      "custom": "望云川"
     },
     "icon": "/img/logo.png"
   },
@@ -16,8 +16,8 @@
   "hometop": {
     "enable": true,
     "banner": {
-      "title": "Solitude",
-      "desc": "A fast, elegant and feature-rich Astro theme",
+      "title": "望云川",
+      "desc": "凭栏望云，渡川而行",
       "icon": {}
     },
     "group": {},
@@ -43,8 +43,8 @@
         "emoji": null,
         "sticker": null
       },
-      "description": "An Astro theme for expressive personal sites.",
-      "content": "Write, collect, and share with Solitude.",
+      "description": "望云川",
+      "content": "凭栏望云，渡川而行",
       "state": {
         "morning": "Good morning",
         "noon": "Good noon",
@@ -316,7 +316,7 @@
     }
   },
   "twikoo": {
-    "envId": "",
+    "envId": "https://twikoo.wyclab.com",
     "region": "",
     "style": true,
     "accessToken": "",

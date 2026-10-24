@@ -10,20 +10,20 @@ export default defineSolitudeConfig({
   author: { name: '望云川' },
   menus: [
     {
-      name: 'Library',
+      name: '归档',
       children: [
-        { name: 'All posts', url: '/archives/', icon: 'fas fa-folder-closed' },
-        { name: 'Categories', url: '/categories/', icon: 'fas fa-clone' },
-        { name: 'Tags', url: '/tags/', icon: 'fas fa-tags' },
+        { name: '全部文章', url: '/archives/', icon: 'fas fa-folder-closed' },
+        { name: '分类', url: '/categories/', icon: 'fas fa-clone' },
+        { name: '标签', url: '/tags/', icon: 'fas fa-tags' },
       ],
     },
-    { name: 'Friends', url: '/links/' },
+    { name: '友链', url: '/links/' },
     {
-      name: 'Explore',
+      name: '探索',
       children: [
-        { name: 'About the theme', url: '/about/' },
-        { name: 'My equipment', url: '/equipment/' },
-        { name: 'Short updates', url: '/brevity/' },
+        { name: '关于', url: '/about/' },
+        { name: '项目', url: '/equipment/' },
+        { name: '即刻', url: '/brevity/' },
       ],
     },
   ],
@@ -68,20 +68,20 @@ export default defineSolitudeConfig({
         left: [
           {
             name: 'GitHub',
-            url: 'https://github.com/everfu/astro-solitude',
+            url: 'https://github.com/wyclab',
             icon: 'fab fa-github',
           },
         ],
         right: [{ name: 'RSS', url: '/index.xml', icon: 'fas fa-rss' }],
       },
       group: {
-        Explore: [
-          { name: 'Posts', url: '/archives/' },
-          { name: 'Categories', url: '/categories/' },
+        归档: [
+          { name: '全部文章', url: '/archives/' },
+          { name: '分类', url: '/categories/' },
         ],
-        About: [
-          { name: 'Theme', url: '/about/' },
-          { name: 'Friends', url: '/links/' },
+        关于: [
+          { name: '博主', url: '/about/' },
+          { name: '友链', url: '/links/' },
         ],
       },
     },
@@ -100,7 +100,7 @@ export default defineSolitudeConfig({
         { modifier: 'shift', key: 'K', action: 'toggleKeyboard' },
       ],
     },
-    search: { tags: ['Astro', 'Solitude', 'MDX'], local: { preload: true } },
+    search: { tags: ['股票', '经济', '日记'], local: { preload: true } },
     pwa: { enable: true },
   },
 });

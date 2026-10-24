@@ -13,6 +13,7 @@ interface Props {
   posts: Post[];
   home?: boolean;
   post?: boolean;
+  tag?: boolean;
   enabled?: boolean;
   headings?: { depth: number; slug: string; text: string }[];
 }
@@ -20,10 +21,17 @@ const {
   posts,
   home = false,
   post = false,
+  tag = false,
   enabled = true,
   headings = [],
 } = Astro.props;
-const scope = home ? cfg.aside.home : post ? cfg.aside.post : cfg.aside.page;
+const scope = tag
+  ? cfg.aside.tag
+  : home
+    ? cfg.aside.home
+    : post
+      ? cfg.aside.post
+      : cfg.aside.page;
 const groups = [scope.noSticky.split(','), scope.Sticky.split(',')];
 const card = cfg.aside.my_card;
 const recent = (home ? homePosts(posts) : posts)
@@ -179,39 +187,41 @@ for (const heading of headings) {
                       {t('moreTags')}
                     </span>
                   )}
-                  <hr />
+                  {!tag && <hr />}
                 </>
               )}
-              <div class="webinfo tw:[#sidebar_#sidebar-menus_&]:flex tw:[#sidebar_#sidebar-menus_&]:whitespace-nowrap tw:[#sidebar_#sidebar-menus_&]:flex-col">
-                {cfg.aside.siteinfo.postcount && (
-                  <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
-                    <div class="item-name">{t('posts')}</div>
-                    <div class="item-count">{posts.length}</div>
-                  </div>
-                )}
-                {cfg.aside.siteinfo.runtimeenable && (
-                  <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
-                    <div class="item-name">{t('uptime')}</div>
-                    <div class="item-count runtimeshow" />
-                  </div>
-                )}
-                {cfg.aside.siteinfo.updatetime && (
-                  <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
-                    <div class="item-name">{t('lastUpdated')}</div>
-                    <time class="item-count" datetime={isoDate(updated)}>
-                      {dateLabel(updated)}
-                    </time>
-                  </div>
-                )}
-                {cfg.aside.siteinfo.wordcount && (
-                  <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
-                    <div class="item-name">{t('totalWords')}</div>
-                    <div class="item-count">
-                      {posts.reduce((n, p) => n + wordCount(p.body ?? ''), 0)}
+              {!tag && (
+                <div class="webinfo tw:[#sidebar_#sidebar-menus_&]:flex tw:[#sidebar_#sidebar-menus_&]:whitespace-nowrap tw:[#sidebar_#sidebar-menus_&]:flex-col">
+                  {cfg.aside.siteinfo.postcount && (
+                    <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
+                      <div class="item-name">{t('posts')}</div>
+                      <div class="item-count">{posts.length}</div>
                     </div>
-                  </div>
-                )}
-              </div>
+                  )}
+                  {cfg.aside.siteinfo.runtimeenable && (
+                    <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
+                      <div class="item-name">{t('uptime')}</div>
+                      <div class="item-count runtimeshow" />
+                    </div>
+                  )}
+                  {cfg.aside.siteinfo.updatetime && (
+                    <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
+                      <div class="item-name">{t('lastUpdated')}</div>
+                      <time class="item-count" datetime={isoDate(updated)}>
+                        {dateLabel(updated)}
+                      </time>
+                    </div>
+                  )}
+                  {cfg.aside.siteinfo.wordcount && (
+                    <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
+                      <div class="item-name">{t('totalWords')}</div>
+                      <div class="item-count">
+                        {posts.reduce((n, p) => n + wordCount(p.body ?? ''), 0)}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           ) : name.trim() === 'newest_comment' &&
             cfg.comment.use &&

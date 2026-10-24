@@ -382,6 +382,7 @@ const commentsEnabled =
         <Aside
           posts={posts}
           enabled={!hideAside}
+          tag={route.kind === 'term' && route.taxonomy === 'tags'}
           headings={p.toc === false ? [] : headings}
         />
       </main>

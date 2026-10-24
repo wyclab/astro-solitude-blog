@@ -37,6 +37,10 @@
       "noSticky": "about",
       "Sticky": "newestPost,allInfo"
     },
+    "tag": {
+      "noSticky": "allInfo",
+      "Sticky": ""
+    },
     "my_card": {
       "author": {
         "img": "/img/logo.png",

@@ -50,7 +50,7 @@ export default defineSolitudeConfig({
       home: { noSticky: 'about', Sticky: 'allInfo' },
       post: { noSticky: '', Sticky: '' },
       page: { noSticky: 'about', Sticky: 'newestPost,allInfo' },
-      tag: { noSticky: 'allInfo,about', Sticky: 'newestPost' },
+      tag: { noSticky: '', Sticky: 'allInfo' },
       my_card: {
         description: '望云川',
         content: '凭栏望云，渡川而行',

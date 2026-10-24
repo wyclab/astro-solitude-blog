@@ -1,13 +1,13 @@
 import { defineSolitudeConfig } from './lib/config';
 
 export default defineSolitudeConfig({
-  site: 'https://example.org',
-  title: 'Solitude',
+  site: 'https://blog.wyclab.com',
+  title: '望云川',
   description:
-    'Write and create with Astro. A thoughtful home for your stories.',
-  locale: 'en',
-  timeZone: 'UTC',
-  author: { name: 'Solitude' },
+    '望云川，一个普通人的记录',
+  locale: 'zh-CN',
+  timeZone: 'Asia/Shanghai',
+  author: { name: '望云川' },
   menus: [
     {
       name: 'Library',

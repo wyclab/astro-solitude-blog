@@ -8,7 +8,7 @@ tags:
 - 感想
 - 互联网
 - 人性
-cover:'https://static.wyclab.com/2C62C037-BCA1-412E-B2BD-ECE0D6140BEE_1_105_c261024.jpeg'
+cover: 'https://static.wyclab.com/2C62C037-BCA1-412E-B2BD-ECE0D6140BEE_1_105_c261024.jpeg'
 ---
 
 

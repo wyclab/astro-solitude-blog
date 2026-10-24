@@ -59,7 +59,7 @@
   "archiveDateFormat": "2006年1月2日",
   "archiveLoading": "正在載入文章...",
   "archiveLoadError": "文章資料載入失敗，請稍後再試。",
-  "archiveEmpty": "此年份暫無文章。",
+  "archiveEmpty": "目前篩選條件下暫無文章。",
   "uncategorized": "未分類",
   "relatedPosts": "相關文章",
   "relatedPostsLead": "喜歡這篇文章的人也看了",

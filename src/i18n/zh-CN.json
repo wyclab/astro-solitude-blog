@@ -59,7 +59,7 @@
   "archiveDateFormat": "2006年1月2日",
   "archiveLoading": "文章列表加载中...",
   "archiveLoadError": "文章数据加载失败，请稍后再试。",
-  "archiveEmpty": "当前年份下暂无文章。",
+  "archiveEmpty": "当前筛选条件下暂无文章。",
   "uncategorized": "未分类",
   "relatedPosts": "相关推荐",
   "relatedPostsLead": "喜欢这篇文章的人也看了",

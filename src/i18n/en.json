@@ -59,7 +59,7 @@
   "archiveDateFormat": "January 2, 2006",
   "archiveLoading": "Loading posts...",
   "archiveLoadError": "Unable to load posts. Please try again later.",
-  "archiveEmpty": "No posts for this year.",
+  "archiveEmpty": "No posts match the current filter.",
   "uncategorized": "Uncategorized",
   "relatedPosts": "Related posts",
   "relatedPostsLead": "Readers who liked this post also read",

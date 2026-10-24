@@ -4,8 +4,10 @@ import { taxonomy, type Post } from '../lib/content';
 interface Props {
   posts: Post[];
   home?: boolean;
+  /** On the archives page, category tabs filter in place via ?category= instead of linking to term pages. */
+  archive?: boolean;
 }
-const { posts, home = false } = Astro.props;
+const { posts, home = false, archive = false } = Astro.props;
 const categories = taxonomy(posts, 'categories');
 ---
 
@@ -40,7 +42,13 @@ const categories = taxonomy(posts, 'categories');
         id={`category-${c.name}`}
         data-default-order={i + 2}
       >
-        <a href={url(c.path)}>{c.name}</a>
+        <a
+          href={archive
+            ? `${url('/archives/')}?category=${encodeURIComponent(c.name)}`
+            : url(c.path)}
+        >
+          {c.name}
+        </a>
       </div>
     ))}
   </div>

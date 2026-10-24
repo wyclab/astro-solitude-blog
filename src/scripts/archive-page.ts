@@ -39,8 +39,10 @@ export const archivePageController = (() => {
     labels: {} as Record<string, string>,
     posts: [] as ArchivePost[],
     years: [] as string[],
+    categories: [] as string[],
     perPage: 10,
     activeYear: 'all',
+    activeCategory: 'all',
     currentPage: 1,
     abortController: null as AbortController | null,
     init() {
@@ -91,9 +93,20 @@ export const archivePageController = (() => {
       this.years = [
         ...new Set(this.posts.map((post) => String(post.year))),
       ].sort((a, b) => Number(b) - Number(a));
+      this.categories = [
+        ...new Set(
+          this.posts.map((post) =>
+            String(post.primaryCategory || this.labels.uncategorized),
+          ),
+        ),
+      ];
       const params = new URL(location.href).searchParams;
       this.activeYear = this.years.includes(params.get('year') || '')
         ? params.get('year')!
+        : 'all';
+      const requestedCategory = params.get('category') || '';
+      this.activeCategory = this.categories.includes(requestedCategory)
+        ? requestedCategory
         : 'all';
       const requestedPage = Number(params.get('page'));
       this.currentPage =
@@ -114,6 +127,9 @@ export const archivePageController = (() => {
       const target = new URL(location.href);
       if (year === 'all') target.searchParams.delete('year');
       else target.searchParams.set('year', year);
+      if (this.activeCategory === 'all')
+        target.searchParams.delete('category');
+      else target.searchParams.set('category', this.activeCategory);
       if (page === 1) target.searchParams.delete('page');
       else target.searchParams.set('page', String(page));
       return target;
@@ -162,10 +178,16 @@ export const archivePageController = (() => {
     render() {
       const { shell, list } = this;
       if (!shell || !list) return;
-      const filteredPosts =
-        this.activeYear === 'all'
-          ? this.posts
-          : this.posts.filter((post) => String(post.year) === this.activeYear);
+      const filteredPosts = this.posts.filter((post) => {
+        const yearMatch =
+          this.activeYear === 'all' ||
+          String(post.year) === this.activeYear;
+        const categoryMatch =
+          this.activeCategory === 'all' ||
+          String(post.primaryCategory || this.labels.uncategorized) ===
+            this.activeCategory;
+        return yearMatch && categoryMatch;
+      });
       const totalPages = Math.max(
         Math.ceil(filteredPosts.length / this.perPage),
         1,
@@ -308,6 +330,8 @@ export const archivePageController = (() => {
       this.pagination = null;
       this.paginationSection = null;
       this.posts = [];
+      this.years = [];
+      this.categories = [];
       this.labels = {};
     },
   };

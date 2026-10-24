@@ -59,7 +59,7 @@
   "archiveDateFormat": "02/01/2006",
   "archiveLoading": "Cargando artículos...",
   "archiveLoadError": "No se pudieron cargar los artículos. Inténtalo de nuevo más tarde.",
-  "archiveEmpty": "No hay artículos de este año.",
+  "archiveEmpty": "No hay artículos que coincidan con el filtro actual.",
   "uncategorized": "Sin categoría",
   "relatedPosts": "Artículos relacionados",
   "relatedPostsLead": "Quienes disfrutaron este artículo también leyeron",

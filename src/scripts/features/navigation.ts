@@ -156,9 +156,15 @@ export const navigationActions = {
       const categoryItems =
         categoryBar.querySelectorAll<HTMLElement>('.category-bar-item');
       categoryItems.forEach((item) => item.classList.remove('select'));
-      const activeItemId = isHomePage
-        ? 'category-bar-home'
-        : currentPath.split('/').slice(-2, -1)[0];
+      const categoryParam = new URLSearchParams(window.location.search).get(
+        'category',
+      );
+      const activeItemId =
+        categoryParam && document.getElementById(`category-${categoryParam}`)
+          ? `category-${categoryParam}`
+          : isHomePage
+            ? 'category-bar-home'
+            : currentPath.split('/').slice(-2, -1)[0];
       const activeItem = document.getElementById(activeItemId);
       if (activeItem) {
         activeItem.classList.add('select');

@@ -1,12 +1,11 @@
 ---
-import { cfg, config, t, url, dateLabel, isoDate } from '../lib/site';
+import { cfg, config, t, url } from '../lib/site';
 import TocItems, { type Heading } from './TocItems.astro';
 import AsideGroup from './AsideGroup.astro';
 import {
   homePosts,
   contentPath,
   taxonomy,
-  wordCount,
   type Post,
 } from '../lib/content';
 interface Props {
@@ -39,7 +38,6 @@ const recent = (home ? homePosts(posts) : posts)
   .sort((a, b) => +b.data.date - +a.data.date)
   .slice(0, 5);
 const tags = taxonomy(posts, 'tags');
-const updated = new Date();
 const toc: Heading[] = [];
 const ancestors: Heading[] = [];
 for (const heading of headings) {
@@ -187,40 +185,7 @@ for (const heading of headings) {
                       {t('moreTags')}
                     </span>
                   )}
-                  {!tag && <hr />}
                 </>
-              )}
-              {!tag && (
-                <div class="webinfo tw:[#sidebar_#sidebar-menus_&]:flex tw:[#sidebar_#sidebar-menus_&]:whitespace-nowrap tw:[#sidebar_#sidebar-menus_&]:flex-col">
-                  {cfg.aside.siteinfo.postcount && (
-                    <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
-                      <div class="item-name">{t('posts')}</div>
-                      <div class="item-count">{posts.length}</div>
-                    </div>
-                  )}
-                  {cfg.aside.siteinfo.runtimeenable && (
-                    <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
-                      <div class="item-name">{t('uptime')}</div>
-                      <div class="item-count runtimeshow" />
-                    </div>
-                  )}
-                  {cfg.aside.siteinfo.updatetime && (
-                    <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
-                      <div class="item-name">{t('lastUpdated')}</div>
-                      <time class="item-count" datetime={isoDate(updated)}>
-                        {dateLabel(updated)}
-                      </time>
-                    </div>
-                  )}
-                  {cfg.aside.siteinfo.wordcount && (
-                    <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
-                      <div class="item-name">{t('totalWords')}</div>
-                      <div class="item-count">
-                        {posts.reduce((n, p) => n + wordCount(p.body ?? ''), 0)}
-                      </div>
-                    </div>
-                  )}
-                </div>
               )}
             </div>
           ) : name.trim() === 'newest_comment' &&

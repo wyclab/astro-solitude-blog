@@ -1,6 +1,6 @@
 ---
-import { cfg, config, t, url, dateLabel, isoDate } from '../lib/site';
-import { taxonomy, wordCount, type Post } from '../lib/content';
+import { cfg, t, url } from '../lib/site';
+import { taxonomy, type Post } from '../lib/content';
 import Menu from './Menu.astro';
 interface Props {
   posts: Post[];
@@ -10,7 +10,6 @@ interface Props {
 const { posts, comments = false, toc = false } = Astro.props;
 const tags = taxonomy(posts, 'tags');
 const categories = taxonomy(posts, 'categories');
-const updated = new Date();
 const actionLabels: Record<string, string> = {
   toggleKeyboard: 'keyboardDisable',
   showConsole: 'keyboardConsole',
@@ -343,37 +342,6 @@ const contextItems = [
         <a class="more-tags-btn" href={url('/tags/')}>
           {t('moreTags')}
         </a>
-      )}
-    </div>
-    <span class="sidebar-menu-item-title">{t('siteInformation')}</span>
-    <div class="webinfo tw:[#sidebar_#sidebar-menus_&]:flex tw:[#sidebar_#sidebar-menus_&]:whitespace-nowrap tw:[#sidebar_#sidebar-menus_&]:flex-col">
-      {cfg.aside.siteinfo.postcount && (
-        <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
-          <div class="item-name">{t('posts')}</div>
-          <div class="item-count">{posts.length}</div>
-        </div>
-      )}
-      {cfg.aside.siteinfo.runtimeenable && (
-        <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
-          <div class="item-name">{t('uptime')}</div>
-          <div class="item-count runtimeshow" />
-        </div>
-      )}
-      {cfg.aside.siteinfo.updatetime && (
-        <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
-          <div class="item-name">{t('lastUpdated')}</div>
-          <time class="item-count" datetime={isoDate(updated)}>
-            {dateLabel(updated)}
-          </time>
-        </div>
-      )}
-      {cfg.aside.siteinfo.wordcount && (
-        <div class="webinfo-item tw:flex tw:flex-row tw:justify-between tw:[#sidebar_#sidebar-menus_.webinfo_&]:justify-between">
-          <div class="item-name">{t('totalWords')}</div>
-          <div class="item-count">
-            {posts.reduce((n, p) => n + wordCount(p.body ?? ''), 0)}
-          </div>
-        </div>
       )}
     </div>
   </div>

@@ -6,6 +6,7 @@ export default defineSolitudeConfig({
   description:
     '望云川，一个普通人的记录',
   locale: 'zh-CN',
+  hasCJKLanguage: true,
   timeZone: 'Asia/Shanghai',
   author: { name: '望云川' },
   menus: [

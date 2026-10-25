@@ -1,6 +1,7 @@
 ---
 title: '“加班”银行阻碍了共同富裕'
 date: '2026-03-31 08:00'
+cover: 'https://static.wyclab.com/CM+BANK+COVER261025.jpg'
 categories:
 - 经济
 tags:

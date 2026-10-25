@@ -1,6 +1,7 @@
 ---
 title: '清明与乡土'
 date: '2026-04-07 08:00'
+cover: 'https://static.wyclab.com/1792934623638261025.jpeg'
 categories:
 - 生活
 tags:

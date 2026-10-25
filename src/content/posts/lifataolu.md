@@ -1,6 +1,7 @@
 ---
 title: '熟客理发师搞消费套路'
 date: '2026-04-21 08:00'
+cover: 'https://static.wyclab.com/Coverly-730x310261025.png'
 categories:
 - 生活
 tags:

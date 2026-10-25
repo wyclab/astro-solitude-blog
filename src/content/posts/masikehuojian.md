@@ -1,6 +1,7 @@
 ---
 title: '不锈钢造火箭，什么是马斯克第一性原理'
 date: '2026-01-30 08:00'
+cover: 'https://static.wyclab.com/HJCQXuOWkAAF3rY261025.png'
 categories:
 - 科技
 tags:

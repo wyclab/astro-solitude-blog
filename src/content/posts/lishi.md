@@ -1,6 +1,7 @@
 ---
 title: '历史只是观点，不是事实'
 date: '2026-04-11 08:00'
+cover: 'https://static.wyclab.com/1792934986643261025.jpeg'
 categories:
 - 生活
 tags:

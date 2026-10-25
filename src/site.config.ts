@@ -30,6 +30,13 @@ export default defineSolitudeConfig({
   ],
   theme: {
     lightbox: 'fancybox',
+    // 评论系统：Twikoo
+    comment: {
+      use: 'twikoo',
+    },
+    twikoo: {
+      envId: 'https://twikoo.wyclab.com',
+    },
     nav: {
       group: {
         切换站点: [

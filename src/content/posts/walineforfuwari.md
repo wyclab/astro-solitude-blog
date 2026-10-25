@@ -1,6 +1,6 @@
 ---
 title: 'Fuwari增加Waline评论系统'
-date: '2026-04-06T08:00:00+08:00'
+date: '2026-04-06 08:00'
 categories:
 - 建站
 tags:

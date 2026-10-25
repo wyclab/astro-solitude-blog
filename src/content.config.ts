@@ -2,12 +2,27 @@ import { defineCollection } from 'astro:content';
 import { z } from 'astro/zod';
 import { glob } from 'astro/loaders';
 
+// 统一按北京时间解析日期：无时区的时间串（如 '2026-04-25 08:00'）固定补 +08:00；
+// 已带时区 / 纯日期（YYYY-MM-DD，UTC）则原样解析，兼容旧写法。
+const beijingDate = z.preprocess((val) => {
+  if (val instanceof Date) return val;
+  if (typeof val === 'number') return new Date(val);
+  if (typeof val !== 'string') return val;
+  const s = val.trim();
+  if (!s) return val;
+  let d: Date;
+  if (/([+-]\d{2}:?\d{2}|Z)$/i.test(s)) d = new Date(s);
+  else if (/^\d{4}-\d{2}-\d{2}$/.test(s)) d = new Date(s);
+  else d = new Date(`${s.replace(' ', 'T')}+08:00`);
+  return Number.isNaN(d.getTime()) ? val : d;
+}, z.date());
+
 const common = z
   .object({
     title: z.string(),
     description: z.string().optional(),
-    date: z.coerce.date().optional(),
-    lastmod: z.coerce.date().optional(),
+    date: beijingDate.optional(),
+    lastmod: beijingDate.optional(),
     slug: z.string().optional(),
     url: z.string().optional(),
     aliases: z.array(z.string()).default([]),
@@ -29,7 +44,7 @@ const common = z
 export const collections = {
   posts: defineCollection({
     loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/posts' }),
-    schema: common.extend({ date: z.coerce.date() }),
+    schema: common.extend({ date: beijingDate }),
   }),
   pages: defineCollection({
     loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/pages' }),

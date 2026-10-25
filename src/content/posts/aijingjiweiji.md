@@ -1,6 +1,6 @@
 ---
 title: 'AI、机器人与经济危机'
-date: '2026-02-01T08:00:00+08:00'
+date: '2026-02-01 08:00'
 categories:
 - 科技
 tags:
@@ -8,7 +8,7 @@ tags:
 - 马斯克
 - 科技
 - 经济
-Cover: 'https://static.wyclab.com/1792910813265261025.jpeg'
+cover: 'https://static.wyclab.com/1792910813265261025.jpeg'
 ---
 
 

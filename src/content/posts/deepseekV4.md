@@ -1,6 +1,6 @@
 ---
 title: 'DeepSeekV4，继续开源'
-date: '2026-04-25T08:00:00+08:00'
+date: '2026-04-25 08:00'
 description: '传闻中的DeepSeek V4模型终于来了，性能比肩顶级闭源模型。关键是，开源！开源！造福一方！API费用低，被媒体亲切的欢呼“迈入百万上下文普惠时代”。'
 categories:
 - 科技
@@ -8,7 +8,7 @@ tags:
 - AI
 - 民企
 - 科技
-Cover: 'https://static.wyclab.com/deepseek261025.webp'
+cover: 'https://static.wyclab.com/deepseek261025.webp'
 ---
 
 

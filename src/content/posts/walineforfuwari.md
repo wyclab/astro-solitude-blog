@@ -5,6 +5,7 @@ categories:
 - 建站
 tags:
 - 建站笔记
+cover: 'https://static.wyclab.com/1792915945616261025.jpeg'
 ---
 
 

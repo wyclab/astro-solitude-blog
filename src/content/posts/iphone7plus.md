@@ -7,6 +7,7 @@ categories:
 tags:
 - 苹果
 - 设备
+cover: 'https://static.wyclab.com/1792915288746261025.jpeg'
 ---
 
 
@@ -62,4 +63,3 @@ tags:
 
 通过iTunes恢复备份
 
-![image4](C:/Users/wycpr/Downloads/image4.png)

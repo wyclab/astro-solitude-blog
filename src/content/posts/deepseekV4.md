@@ -8,6 +8,7 @@ tags:
 - AI
 - 民企
 - 科技
+Cover: 'https://static.wyclab.com/deepseek261025.webp'
 ---
 
 

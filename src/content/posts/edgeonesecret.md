@@ -6,6 +6,8 @@ categories:
 - 建站
 tags:
 - 建站笔记
+- 腾讯云
+cover: 'https://static.wyclab.com/1792915429460261025.jpeg'
 ---
 
 

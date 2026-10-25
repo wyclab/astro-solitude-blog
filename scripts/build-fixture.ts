@@ -8,6 +8,7 @@ for (const variant of [
   'algolia',
   'docsearch',
   'comments',
+  'twikoo',
   'music',
 ]) {
   const target = path.resolve(`.astro/${variant}-fixture`);
@@ -74,6 +75,19 @@ for (const variant of [
           },
         },
         pwa: { manifest: '/app.webmanifest' },
+      },
+    });
+  if (variant === 'twikoo')
+    fixture = mergeConfig(config, {
+      theme: {
+        comment: {
+          use: 'twikoo',
+          lazyload: false,
+          commentBarrage: false,
+          newest_comment: { enable: false },
+        },
+        recent_comments: { enable: false },
+        console: { recentComment: { enable: false } },
       },
     });
   if (variant === 'music')

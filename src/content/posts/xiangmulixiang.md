@@ -6,6 +6,7 @@ categories:
 tags:
 - 政策
 - 企业
+cover: 'https://static.wyclab.com/1792908734889261025.jpeg'
 ---
 
 

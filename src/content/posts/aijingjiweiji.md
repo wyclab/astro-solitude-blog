@@ -8,6 +8,7 @@ tags:
 - 马斯克
 - 科技
 - 经济
+Cover: 'https://static.wyclab.com/1792910813265261025.jpeg'
 ---
 
 

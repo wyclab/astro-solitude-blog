@@ -1,6 +1,7 @@
 ---
 title: '舍与得'
 date: '2023-09-28 08:00'
+sticky: 3
 categories:
 - 生活
 tags:

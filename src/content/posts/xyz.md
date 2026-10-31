@@ -1,6 +1,7 @@
 ---
 title: '降本增效：更换域名至XYZ后缀'
 date: '2026-10-25 16:40'
+sticky: 4
 categories:
 - 建站
 tags:

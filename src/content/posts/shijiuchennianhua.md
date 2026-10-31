@@ -1,6 +1,7 @@
 ---
 title: '人生的二叉树理论和复利理论'
 date: '2026-04-18 08:00'
+sticky: 1
 categories:
 - 生活
 tags:

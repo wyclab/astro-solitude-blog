@@ -55,7 +55,7 @@ for (const file of await fs.readdir('src/content/posts'))
 for (const [name, type] of Object.entries({
   about: 'about',
   links: 'links',
-  equipment: 'kit',
+  equipment: 'project',
   archives: 'archives',
   brevity: 'brevity',
   music: 'music',

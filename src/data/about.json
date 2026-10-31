@@ -236,7 +236,7 @@
       "type": "story",
       "label": "Our story",
       "title": "Why Solitude?",
-      "content": "Solitude is a place to collect ideas and tell stories at your own pace. Each post deserves a clear structure, comfortable reading, and a home where it can be found again.\n\nThe Astro edition keeps the familiar visual style while using content collections, Astro components, and a static build pipeline. Node.js powers development and builds; the generated website can be served by a static host.\n\nThis demo is a working starting point. Replace its stories and sample profile with your own, then explore the homepage, posts, friends, equipment, and short updates. Comments and online music are available when you choose to configure them.\n\nSolitude keeps improving around **reading, accessibility, performance, and long-term maintenance**. The features are here to support what you want to share.\n"
+      "content": "Solitude is a place to collect ideas and tell stories at your own pace. Each post deserves a clear structure, comfortable reading, and a home where it can be found again.\n\nThe Astro edition keeps the familiar visual style while using content collections, Astro components, and a static build pipeline. Node.js powers development and builds; the generated website can be served by a static host.\n\nThis demo is a working starting point. Replace its stories and sample profile with your own, then explore the homepage, posts, friends, projects, and short updates. Comments and online music are available when you choose to configure them.\n\nSolitude keeps improving around **reading, accessibility, performance, and long-term maintenance**. The features are here to support what you want to share.\n"
     }
   ]
 }

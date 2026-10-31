@@ -1,0 +1,16 @@
+{
+  "groups": [
+    {
+      "name": "在做的项目",
+      "description": "把想法做成能用的东西，边用边改。",
+      "items": [
+        {
+          "name": "CPA学习看板",
+          "specification": "备考记录 · 进度追踪",
+          "description": "挑战CPA记录过程",
+          "image": "/img/default.avif"
+        }
+      ]
+    }
+  ]
+}

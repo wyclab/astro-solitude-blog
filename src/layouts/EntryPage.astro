@@ -24,7 +24,7 @@ import Copyright from '../components/Copyright.astro';
 import Comments from '../components/Comments.astro';
 import About from '../components/pages/About.astro';
 import Links from '../components/pages/Links.astro';
-import Equipment from '../components/pages/Equipment.astro';
+import Project from '../components/pages/Project.astro';
 import Brevity from '../components/pages/Brevity.astro';
 import Archive from '../components/pages/Archive.astro';
 import RecentComments from '../components/pages/RecentComments.astro';
@@ -51,7 +51,7 @@ const hideAside =
     'tags',
     'categories',
     'links',
-    'kit',
+    'project',
     'brevity',
     'recentcomment',
     'message',
@@ -335,8 +335,8 @@ const commentsEnabled =
             >
               {Content && <Content components={components} />}
             </Links>
-          ) : type === 'kit' ? (
-            <Equipment data={pageData(p.data, 'kit')} comment={p.comment} />
+          ) : type === 'project' ? (
+            <Project data={pageData(p.data, 'project')} comment={p.comment} />
           ) : type === 'brevity' ? (
             <Brevity data={pageData(p.data, 'brevity')} />
           ) : type === 'music' && cfg.music.enable ? (

@@ -81,7 +81,7 @@ for (const width of [390, 768, 1440])
       '/p/writing/',
       '/about/',
       '/links/',
-      '/equipment/',
+      '/project/',
       '/archives/',
       '/tags/',
       '/categories/',

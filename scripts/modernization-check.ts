@@ -42,7 +42,7 @@ const routes =
         '/archives/',
         '/about/',
         '/links/',
-        '/equipment/',
+        '/project/',
         '/tags/',
         '/categories/',
         '/series/',

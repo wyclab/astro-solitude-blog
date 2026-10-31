@@ -20,7 +20,7 @@
 @import "./pages/home.css" layer(solitude.pages);
 @import "./pages/taxonomy-archives.css" layer(solitude.pages);
 @import "./pages/music.css";
-@import "./pages/links-equipment.css" layer(solitude.pages);
+@import "./pages/links-project.css" layer(solitude.pages);
 @import "./pages/post.css" layer(solitude.pages);
 
 @import "./shortcodes/text-status.css" layer(solitude.shortcodes);

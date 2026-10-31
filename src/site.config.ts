@@ -23,7 +23,7 @@ export default defineSolitudeConfig({
       name: '探索',
       children: [
         { name: '关于', url: '/about/' },
-        { name: '项目', url: '/equipment/' },
+        { name: '项目', url: '/project/' },
         { name: '即刻', url: '/brevity/' },
       ],
     },

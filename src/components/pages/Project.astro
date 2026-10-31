@@ -1,0 +1,73 @@
+---
+import project from '../../data/project.json';
+import { cfg, t, url } from '../../lib/site';
+interface Props {
+  comment?: boolean;
+  data?: typeof project;
+}
+const { comment = true, data = project } = Astro.props;
+---
+
+<div id="project">
+  {data.groups.map((g) => (
+    <section class="project-item">
+      <h2 class="project-item-title">{g.name}</h2>
+      <div class="project-item-description">{g.description}</div>
+      <div class="project-item-content tw:[#project_.project-item_&]:flex tw:[#project_.project-item_&]:flex-row tw:[#project_.project-item_&]:flex-wrap">
+        {g.items.map((item) => (
+          <div class="project-item-content-item tw:[#project_.project-item_&]:relative tw:[#project_.project-item_&]:overflow-hidden">
+            <div class="project-item-content-item-cover tw:[#project_.project-item_.project-item-content-item_&]:flex tw:[#project_.project-item_.project-item-content-item_&]:justify-center tw:[#project_.project-item_.project-item-content-item_&]:items-center">
+              <img
+                class="project-item-content-item-image"
+                src={url(item.image ?? '/img/default.avif')}
+                alt={item.name}
+              />
+            </div>
+            <div class="project-item-content-item-info">
+              <div
+                class="project-item-content-item-name tw:[#project_.project-item_.project-item-content-item_.project-item-content-item-info_&]:whitespace-nowrap"
+                role="button"
+                tabindex="0"
+                data-solitude-action="copy"
+                data-solitude-value={item.name}
+                aria-label={t('copyProject').replace('{name}', item.name)}
+              >
+                {item.name}
+              </div>
+              <div class="project-item-content-item-specification tw:[#project_.project-item_.project-item-content-item_.project-item-content-item-info_&]:whitespace-nowrap tw:[#project_.project-item_.project-item-content-item_.project-item-content-item-info_&]:overflow-hidden">
+                {item.specification}
+              </div>
+              <div class="project-item-content-item-description tw:[#project_.project-item_.project-item-content-item_.project-item-content-item-info_&]:overflow-hidden">
+                {item.description}
+              </div>
+              <div class="project-item-content-item-toolbar tw:[#project_.project-item_.project-item-content-item_.project-item-content-item-info_&]:flex tw:[#project_.project-item_.project-item-content-item_.project-item-content-item-info_&]:justify-between tw:[#project_.project-item_.project-item-content-item_.project-item-content-item-info_&]:absolute">
+                {item.link && (
+                  <a
+                    class="project-item-content-item-link tw:[#project_.project-item_.project-item-content-item_.project-item-content-item-info_.project-item-content-item-toolbar_&]:cursor-pointer"
+                    href={item.link}
+                    rel="external nofollow noreferrer"
+                    target="_blank"
+                  >
+                    {t('details')}
+                  </a>
+                )}
+                {cfg.comment.use && comment && (
+                  <a
+                    class="bber-reply tw:cursor-pointer"
+                    role="button"
+                    tabindex="0"
+                    data-solitude-action="toTalk"
+                    data-solitude-value={item.description}
+                    aria-label={t('quoteProject')}
+                  >
+                    <i class="solitude fas fa-comment" />
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  ))}
+</div>

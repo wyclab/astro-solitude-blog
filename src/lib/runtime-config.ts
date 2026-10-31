@@ -71,8 +71,8 @@ export function runtimeConfig(
       ui: labels({
         recommendations: 'recommendations',
         recommendationItem: 'recommendationItem',
-        copyEquipment: 'copyEquipment',
-        quoteEquipment: 'quoteEquipment',
+        copyProject: 'copyProject',
+        quoteProject: 'quoteProject',
         applyFriendLink: 'applyFriendLink',
         postUnit: 'postUnit',
         careerStages: 'careerStages',

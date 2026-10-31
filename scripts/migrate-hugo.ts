@@ -142,7 +142,7 @@ export async function planMigration(source: string): Promise<MigrationPlan> {
     if (index && !parsed.data.type)
       parsed.data.type =
         (
-          { equipment: 'kit', recentcomments: 'recentcomment' } as Record<
+          { equipment: 'project', recentcomments: 'recentcomment' } as Record<
             string,
             string
           >

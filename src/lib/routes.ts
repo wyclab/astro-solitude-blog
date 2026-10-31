@@ -62,7 +62,7 @@ export async function getRoutes(): Promise<Route[]> {
     ['/archives/', 'archives', t('allPosts')],
     ['/about/', 'about', t('about')],
     ['/links/', 'links', t('links')],
-    ['/equipment/', 'kit', t('equipment')],
+    ['/project/', 'project', t('project')],
     ['/music/', 'music', t('music')],
     ['/message/', 'message', t('message')],
     ['/brevity/', 'brevity', t('brevity')],
@@ -71,6 +71,14 @@ export async function getRoutes(): Promise<Route[]> {
   for (const [path, type, title] of defaults)
     if (!pages.some((p) => contentPath(p) === path))
       routes.push({ path, kind: 'page', type, title });
+  // Legacy /equipment/ path is kept as a redirect to the project page.
+  if (!pages.some((p) => contentPath(p) === '/equipment/'))
+    routes.push({
+      path: '/equipment/',
+      kind: 'redirect',
+      title: t('project'),
+      target: '/project/',
+    });
   for (const entry of pages)
     routes.push({
       path: contentPath(entry),

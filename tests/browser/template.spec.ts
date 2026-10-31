@@ -48,7 +48,7 @@ test('template starts with local search and a configured capsule, without commen
     '/recentcomments/',
     '/about/',
     '/links/',
-    '/equipment/',
+    '/project/',
     '/brevity/',
     '/p/components/',
   ]) {

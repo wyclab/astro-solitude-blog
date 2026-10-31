@@ -17,7 +17,7 @@ for (const width of [390, 768, 1440])
         ['post', '/p/writing/'],
         ['about', '/about/'],
         ['links', '/links/'],
-        ['equipment', '/equipment/'],
+        ['project', '/project/'],
         ['archives', '/archives/'],
       ]) {
         await page.goto(

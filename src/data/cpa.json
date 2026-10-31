@@ -1,0 +1,99 @@
+{
+  "dataStatus": "live",
+  "statusNote": "2026-10-13 起开始记录学习时长。",
+  "goalMinutesPerDay": 120,
+  "plan": {
+    "title": "五年考试挑战",
+    "startYear": 2027,
+    "years": 5,
+    "targets": [
+      {
+        "year": 2027,
+        "label": "第 1 年",
+        "subjects": [
+          "会计"
+        ],
+        "status": "active",
+        "note": "首战会计，把基础打牢"
+      },
+      {
+        "year": 2028,
+        "label": "第 2 年",
+        "subjects": [
+          "审计",
+          "税法"
+        ],
+        "status": "planned",
+        "note": ""
+      },
+      {
+        "year": 2029,
+        "label": "第 3 年",
+        "subjects": [
+          "财务成本管理",
+          "经济法"
+        ],
+        "status": "planned",
+        "note": ""
+      },
+      {
+        "year": 2030,
+        "label": "第 4 年",
+        "subjects": [
+          "公司战略与风险管理"
+        ],
+        "status": "planned",
+        "note": ""
+      },
+      {
+        "year": 2031,
+        "label": "第 5 年",
+        "subjects": [
+          "职业能力综合测试"
+        ],
+        "status": "planned",
+        "note": "专业阶段收尾后冲刺综合"
+      }
+    ]
+  },
+  "subjects": [
+    {
+      "name": "会计",
+      "status": "learning"
+    },
+    {
+      "name": "审计",
+      "status": "todo"
+    },
+    {
+      "name": "财务成本管理",
+      "status": "todo"
+    },
+    {
+      "name": "税法",
+      "status": "todo"
+    },
+    {
+      "name": "经济法",
+      "status": "todo"
+    },
+    {
+      "name": "公司战略与风险管理",
+      "status": "todo"
+    },
+    {
+      "name": "职业能力综合测试",
+      "status": "todo"
+    }
+  ],
+  "daily": {
+    "2026-10-13": 60,
+    "2026-10-14": 60,
+    "2026-10-15": 60,
+    "2026-10-16": 11,
+    "2026-10-17": 80,
+    "2026-10-18": 128,
+    "2026-10-31": 140
+  },
+  "mistakes": []
+}

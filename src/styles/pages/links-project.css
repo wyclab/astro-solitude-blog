@@ -23,7 +23,7 @@
 
 #project .project-item .project-item-content-item {
   width: calc(25% - 12px);
-  min-height: 400px;
+  min-height: 340px;
   margin: 8px 6px;
   border: var(--style-border-always);
   border-radius: 16px;
@@ -48,19 +48,19 @@
   width: 100%;
   height: 200px;
   background: var(--efu-secondbg);
+  overflow: hidden;
 }
 
+/* 题图按封面铺满，等比裁切；换成纯 logo 时可自行改回 contain。 */
 #project .project-item .project-item-content-item .project-item-content-item-cover .project-item-content-item-image {
-  object-fit: contain;
-  width: auto;
-  height: auto;
-  max-width: 64%;
-  max-height: 64%;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  transition: transform .4s ease;
 }
 
-#project .project-item:not(:first-child) .project-item-content-item .project-item-content-item-cover .project-item-content-item-image {
-  max-width: 48%;
-  max-height: 48%;
+#project .project-item .project-item-content-item:hover .project-item-content-item-cover .project-item-content-item-image {
+  transform: scale(1.04);
 }
 
 #project .project-item .project-item-content-item .project-item-content-item-info {

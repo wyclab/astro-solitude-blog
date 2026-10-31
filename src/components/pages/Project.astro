@@ -44,9 +44,9 @@ const { comment = true, data = project } = Astro.props;
                 {item.link && (
                   <a
                     class="project-item-content-item-link tw:[#project_.project-item_.project-item-content-item_.project-item-content-item-info_.project-item-content-item-toolbar_&]:cursor-pointer"
-                    href={item.link}
-                    rel="external nofollow noreferrer"
-                    target="_blank"
+                    href={item.link.startsWith('/') ? url(item.link) : item.link}
+                    rel={item.link.startsWith('/') ? undefined : 'external nofollow noreferrer'}
+                    target={item.link.startsWith('/') ? undefined : '_blank'}
                   >
                     {t('details')}
                   </a>

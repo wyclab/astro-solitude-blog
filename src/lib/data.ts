@@ -2,6 +2,7 @@ interface PageData {
   about: typeof import('../data/about.json');
   links: typeof import('../data/links.json');
   project: typeof import('../data/project.json');
+  cpa: typeof import('../data/cpa.json');
   brevity: typeof import('../data/brevity.json');
 }
 // Front matter `data: profile` resolves src/data/profile.json at build time.

@@ -25,6 +25,7 @@ import Comments from '../components/Comments.astro';
 import About from '../components/pages/About.astro';
 import Links from '../components/pages/Links.astro';
 import Project from '../components/pages/Project.astro';
+import CpaDashboard from '../components/pages/CpaDashboard.astro';
 import Brevity from '../components/pages/Brevity.astro';
 import Archive from '../components/pages/Archive.astro';
 import RecentComments from '../components/pages/RecentComments.astro';
@@ -52,6 +53,7 @@ const hideAside =
     'categories',
     'links',
     'project',
+    'cpa',
     'brevity',
     'recentcomment',
     'message',
@@ -337,6 +339,12 @@ const commentsEnabled =
             </Links>
           ) : type === 'project' ? (
             <Project data={pageData(p.data, 'project')} comment={p.comment} />
+          ) : type === 'cpa' ? (
+            <CpaDashboard
+              title={route.title}
+              description={String(p.description ?? '')}
+              data={pageData(p.data, 'cpa')}
+            />
           ) : type === 'brevity' ? (
             <Brevity data={pageData(p.data, 'brevity')} />
           ) : type === 'music' && cfg.music.enable ? (

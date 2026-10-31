@@ -2,9 +2,9 @@ import { defineSolitudeConfig } from './lib/config';
 
 export default defineSolitudeConfig({
   site: 'https://blog.wyclab.com',
-  title: '望云川',
+  title: '云川博客',
   description:
-    '望云川，一个普通人的记录',
+    '云川博客，一个普通人的记录',
   locale: 'zh-CN',
   hasCJKLanguage: true,
   timeZone: 'Asia/Shanghai',
@@ -29,6 +29,7 @@ export default defineSolitudeConfig({
     },
   ],
   theme: {
+    site: { name: { custom: '云川博客' } },
     lightbox: 'fancybox',
     // 评论系统：Twikoo
     comment: {

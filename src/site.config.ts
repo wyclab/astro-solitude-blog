@@ -54,6 +54,40 @@ export default defineSolitudeConfig({
         title: 'Write and create with Solitude',
         desc: 'An Astro theme with guides, examples, and content components.',
       },
+      // 首页顶部 banner 推荐位（顺序即展示顺序）
+      recommendList: [
+        {
+          title: '使用AI构建REITs看板',
+          url: '/p/reits/',
+          cover:
+            'https://static.wyclab.com/2026/10/3399040B-5876-480D-B3C1-7A5CEEC40D52_1_105_c-mvv3o75h-cd9465.jpeg',
+          label: '科技',
+        },
+        {
+          title: '降本增效：更换域名至XYZ后缀',
+          url: '/p/xyz/',
+          cover: 'https://static.wyclab.com/comtoxyz261025.png',
+          label: '建站',
+        },
+        {
+          title: '舍与得',
+          url: '/p/sheyude/',
+          cover: 'https://static.wyclab.com/1792909876594261025.jpeg',
+          label: '生活',
+        },
+        {
+          title: '数字人生计划',
+          url: '/p/shuzirensheng/',
+          cover: '/img/posts/Gemini_Generated_Image_vt4q5nvt4q5nvt4q.png',
+          label: '科技',
+        },
+        {
+          title: '人生的二叉树理论和复利理论',
+          url: '/p/shijiuchennianhua/',
+          cover: 'https://static.wyclab.com/1792908944289261025.jpeg',
+          label: '生活',
+        },
+      ],
     },
     aside: {
       home: { noSticky: 'about', Sticky: 'allInfo' },

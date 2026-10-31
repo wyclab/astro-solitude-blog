@@ -1,7 +1,6 @@
 ---
 title: '使用AI构建REITs看板'
 date: '2026-10-31 11:40'
-sticky: 5
 categories:
 - 科技
 tags:

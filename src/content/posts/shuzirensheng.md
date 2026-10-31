@@ -1,7 +1,6 @@
 ---
 title: '数字人生计划'
 date: '2026-01-08 08:00'
-sticky: 2
 categories:
 - 科技
 tags:

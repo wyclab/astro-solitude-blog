@@ -57,9 +57,6 @@ const sumRange = (from: number, to: number) => {
   return sum;
 };
 const weekMinutes = sumRange(-6, 0);
-const todayMinutes = minutesOf(ref);
-const yesterdayKey = isoOf(shift(-1));
-const yesterdayMinutes = minutesOf(yesterdayKey);
 const hitDays = recent.filter((d) => d.minutes >= goal).length;
 
 /* ---- 连续打卡 ---- */
@@ -96,6 +93,95 @@ const last6Months = monthKeys.slice(-6).map((key) => ({
 const monthMax = Math.max(60, ...last6Months.map((m) => m.minutes));
 const monthScale = Math.ceil(monthMax / 60) * 60;
 
+/* ---- 按季度聚合（近 4 个季度） ---- */
+const quarterOf = (key: string) =>
+  `${key.slice(2, 4)}Q${Math.floor((+key.slice(5, 7) - 1) / 3) + 1}`;
+const quarterTotals: Record<string, number> = {};
+for (const [key, value] of Object.entries(daily)) {
+  const quarter = quarterOf(key);
+  quarterTotals[quarter] = (quarterTotals[quarter] ?? 0) + value;
+}
+const refYear = +ref.slice(0, 4);
+const refQuarterIndex = Math.floor((+ref.slice(5, 7) - 1) / 3);
+const quarterKeys: string[] = [];
+for (let i = 3; i >= 0; i--) {
+  let index = refQuarterIndex - i;
+  let year = refYear;
+  while (index < 0) {
+    index += 4;
+    year -= 1;
+  }
+  quarterKeys.push(`${String(year).slice(2)}Q${index + 1}`);
+}
+const last4Quarters = quarterKeys.map((key) => ({
+  key,
+  label: key,
+  minutes: quarterTotals[key] ?? 0,
+}));
+const currentQuarter = quarterKeys[quarterKeys.length - 1];
+const previousQuarter = quarterKeys[quarterKeys.length - 2];
+const quarterCurrent = quarterTotals[currentQuarter] ?? 0;
+const quarterPrevious = quarterTotals[previousQuarter] ?? 0;
+const quarterMax = Math.max(60, ...last4Quarters.map((q) => q.minutes));
+const quarterScale = Math.ceil(quarterMax / 60) * 60;
+
+/* ---- 热力图（近 12 周，周一为一列起点） ---- */
+const heatWeeksCount = 18;
+const refDow = (new Date(refMs).getUTCDay() + 6) % 7;
+const lastMondayMs = refMs - refDow * DAY;
+const heatStartMs = lastMondayMs - (heatWeeksCount - 1) * 7 * DAY;
+const heatWeeks = Array.from({ length: heatWeeksCount }, (_, w) =>
+  Array.from({ length: 7 }, (_, d) => {
+    const ms = heatStartMs + (w * 7 + d) * DAY;
+    const key = isoOf(ms);
+    return {
+      key,
+      label: shortDate(key),
+      minutes: minutesOf(key),
+      future: ms > refMs,
+    };
+  }),
+);
+const heatLevel = (minutes: number) =>
+  minutes <= 0 ? 0 : minutes <= 30 ? 1 : minutes <= 60 ? 2 : minutes <= 120 ? 3 : 4;
+const heatCells = heatWeeks.flat();
+const heatPastDays = heatCells.filter((d) => !d.future).length;
+const heatDays = heatCells.filter((d) => d.minutes > 0).length;
+const heatMinutes = heatCells.reduce((sum, d) => sum + d.minutes, 0);
+const heatMiss = heatCells.filter(
+  (d) => !d.future && Date.parse(`${d.key}T00:00:00Z`) >= firstMs && d.minutes === 0,
+).length;
+const heatRange = `${shortDate(isoOf(heatStartMs))} – ${shortDate(ref)}`;
+
+/* ---- 最长连续学习 ---- */
+let maxStreak = 0;
+{
+  let run = 0;
+  const daysTotal = Math.round((refMs - firstMs) / DAY) + 1;
+  for (let i = 0; i < daysTotal; i++) {
+    if (minutesOf(isoOf(firstMs + i * DAY)) > 0) {
+      run += 1;
+      if (run > maxStreak) maxStreak = run;
+    } else run = 0;
+  }
+}
+
+/* ---- 倒计时 ---- */
+const exam = data.exam;
+const examMs = Date.parse(`${exam.date}T00:00:00Z`);
+const examDays = Math.max(0, Math.ceil((examMs - refMs) / DAY));
+const examLabel = `${+exam.date.slice(0, 4)} 年 ${+exam.date.slice(5, 7)} 月 ${+exam.date.slice(8, 10)} 日`;
+const endDays = Math.max(
+  0,
+  Math.ceil((Date.parse(`${exam.challengeEnd}T00:00:00Z`) - refMs) / DAY),
+);
+const prepDays = Math.round((refMs - firstMs) / DAY) + 1;
+const prepTotalDays = Math.max(1, Math.round((examMs - firstMs) / DAY) + 1);
+const prepPercent = Math.min(
+  100,
+  Math.max(0, Math.round((prepDays / prepTotalDays) * 100)),
+);
+
 /* ---- 计划 ---- */
 const subjects = data.subjects;
 const passedCount = subjects.filter((s) => s.status === 'passed').length;
@@ -121,8 +207,8 @@ const hours = (minutes: number) => {
 };
 const delta = (current: number, previous: number) =>
   previous > 0 ? Math.round(((current - previous) / previous) * 100) : null;
-const dayDelta = delta(todayMinutes, yesterdayMinutes);
 const monthDelta = delta(monthCurrent, monthPrevious);
+const quarterDelta = delta(quarterCurrent, quarterPrevious);
 const deltaText = (value: number | null) =>
   value === null ? '暂无对比' : `${value > 0 ? '+' : ''}${value}%`;
 const deltaClass = (value: number | null) =>
@@ -267,69 +353,151 @@ const statusText: Record<string, string> = {
     </section>
   </div>
 
-  <section class="cpa-card cpa-compare" data-cpa-compare data-mode="day">
+  <div class="cpa-grid cpa-grid--even">
+    <section class="cpa-card cpa-heat">
+      <div class="cpa-card-head">
+        <h2><i class="solitude fas fa-fire" aria-hidden="true"></i>学习热力图</h2>
+        <span class="cpa-chip">近 18 周</span>
+      </div>
+      <div class="cpa-heat-body">
+        <div class="cpa-heat-chart">
+          <div class="cpa-heat-grid">
+            <div class="cpa-heat-weekdays" aria-hidden="true">
+              <span>一</span><span></span><span>三</span><span></span><span>五</span><span></span><span>日</span>
+            </div>
+            {heatWeeks.map((week) => (
+              <div class="cpa-heat-col">
+                {week.map((day) => (
+                  <div
+                    class:list={[
+                      'cpa-heat-cell',
+                      `is-l${heatLevel(day.minutes)}`,
+                      { 'is-future': day.future, 'is-today': day.key === ref },
+                    ]}
+                    data-tip={day.future ? `${day.label} · 未到` : `${day.label} · ${day.minutes} 分钟`}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
+          <div class="cpa-heat-foot">
+            <span>{heatRange}</span>
+            <ul class="cpa-heat-legend" aria-hidden="true">
+              <li>少</li>
+              <li class="cpa-heat-cell is-l0" />
+              <li class="cpa-heat-cell is-l1" />
+              <li class="cpa-heat-cell is-l2" />
+              <li class="cpa-heat-cell is-l3" />
+              <li class="cpa-heat-cell is-l4" />
+              <li>多</li>
+            </ul>
+          </div>
+        </div>
+        <ul class="cpa-heat-stats">
+          <li><span>学习天数</span><strong>{heatDays} 天</strong></li>
+          <li><span>热力图时长</span><strong>{hours(heatMinutes)} 小时</strong></li>
+          <li><span>最长连续</span><strong>{maxStreak} 天</strong></li>
+          <li><span>空档</span><strong>{heatMiss} 天</strong></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="cpa-card cpa-countdown">
+      <div class="cpa-card-head">
+        <h2><i class="solitude fas fa-hourglass-end" aria-hidden="true"></i>考试倒计时</h2>
+        <span class="cpa-chip">{exam.label}</span>
+      </div>
+      <p class="cpa-count-value">{examDays}<span>天</span></p>
+      <p class="cpa-count-sub">距 {examLabel}（{exam.note}）</p>
+      <div class="cpa-count-progress">
+        <div class="cpa-plan-progress-head">
+          <span>备考时间进度</span>
+          <strong>{prepPercent}%</strong>
+        </div>
+        <div class="cpa-progress" role="img" aria-label={`备考时间进度 ${prepPercent}%`}>
+          <span style={`width:${prepPercent}%`} />
+        </div>
+      </div>
+      <ul class="cpa-count-list">
+        <li><span>已备考</span><strong>{prepDays} 天</strong></li>
+        <li><span>剩余</span><strong>{Math.max(0, prepTotalDays - prepDays)} 天</strong></li>
+        <li><span>距挑战收官</span><strong>{endDays} 天</strong></li>
+        <li><span>已通过科目</span><strong>{passedCount} / {subjects.length}</strong></li>
+      </ul>
+    </section>
+  </div>
+
+  <section class="cpa-card cpa-compare">
     <div class="cpa-card-head">
       <h2><i class="solitude fas fa-scale-balanced" aria-hidden="true"></i>学习时长对比</h2>
-      <div class="cpa-seg" role="group" aria-label="对比维度">
-        <button type="button" class="is-active" data-cpa-mode="day" aria-pressed="true">每日对比</button>
-        <button type="button" data-cpa-mode="month" aria-pressed="false">每月对比</button>
-      </div>
+      <span class="cpa-chip">月度 · 季度</span>
     </div>
-
-    <div class="cpa-compare-pane is-active" data-cpa-pane="day">
-      <div class="cpa-compare-nums">
-        <div class="cpa-compare-cell">
-          <span>今天 · {shortDate(ref)} 周{weekdayOf(ref)}</span>
-          <strong>{hours(todayMinutes)}<em>小时</em></strong>
+    <div class="cpa-compare-grid">
+      <div class="cpa-compare-block">
+        <div class="cpa-compare-block-head">
+          <h3>每月对比</h3>
+          <span>近 6 个月</span>
         </div>
-        <div class="cpa-compare-cell is-muted">
-          <span>昨天 · {shortDate(yesterdayKey)} 周{weekdayOf(yesterdayKey)}</span>
-          <strong>{hours(yesterdayMinutes)}<em>小时</em></strong>
-        </div>
-        <span class:list={['cpa-delta', deltaClass(dayDelta)]}>{deltaText(dayDelta)}</span>
-      </div>
-      <div class="cpa-mini-bars">
-        {recent.map((day) => (
-          <div class="cpa-mini-col">
-            <div
-              class:list={['cpa-mini-bar', { 'is-today': day.key === ref, 'is-zero': day.minutes === 0 }]}
-              style={`height:${heightPct(day.minutes)}%`}
-              data-tip={`${day.label} · ${day.minutes} 分钟`}
-            />
+        <div class="cpa-compare-nums">
+          <div class="cpa-compare-cell">
+            <span>本月 · {+currentMonth.slice(5, 7)} 月</span>
+            <strong>{hours(monthCurrent)}<em>小时</em></strong>
           </div>
-        ))}
-      </div>
-      <p class="cpa-compare-foot">近 {spanDays} 天每日时长，柱状高亮为今天</p>
-    </div>
-
-    <div class="cpa-compare-pane" data-cpa-pane="month">
-      <div class="cpa-compare-nums">
-        <div class="cpa-compare-cell">
-          <span>本月 · {+currentMonth.slice(5, 7)} 月</span>
-          <strong>{hours(monthCurrent)}<em>小时</em></strong>
-        </div>
-        <div class="cpa-compare-cell is-muted">
-          <span>上月 · {previousMonth ? `${+previousMonth.slice(5, 7)} 月` : '—'}</span>
-          <strong>{hours(monthPrevious)}<em>小时</em></strong>
-        </div>
-        <span class:list={['cpa-delta', deltaClass(monthDelta)]}>{deltaText(monthDelta)}</span>
-      </div>
-      <div class="cpa-mini-bars">
-        {last6Months.map((month) => (
-          <div class="cpa-mini-col">
-            <div
-              class:list={['cpa-mini-bar', { 'is-today': month.key === currentMonth, 'is-zero': month.minutes === 0 }]}
-              style={`height:${month.minutes > 0 ? Math.max(4, (month.minutes / monthScale) * 100) : 0}%`}
-              data-tip={`${month.key} · ${hours(month.minutes)} 小时`}
-            />
+          <div class="cpa-compare-cell is-muted">
+            <span>上月 · {+previousMonth.slice(5, 7)} 月</span>
+            <strong>{hours(monthPrevious)}<em>小时</em></strong>
           </div>
-        ))}
+          <span class:list={['cpa-delta', deltaClass(monthDelta)]}>{deltaText(monthDelta)}</span>
+        </div>
+        <div class="cpa-mini-bars">
+          {last6Months.map((month) => (
+            <div class="cpa-mini-col">
+              <div
+                class:list={['cpa-mini-bar', { 'is-today': month.key === currentMonth, 'is-zero': month.minutes === 0 }]}
+                style={`height:${month.minutes > 0 ? Math.max(4, (month.minutes / monthScale) * 100) : 0}%`}
+                data-tip={`${month.key} · ${hours(month.minutes)} 小时`}
+              />
+            </div>
+          ))}
+        </div>
+        <ul class="cpa-period-labels">
+          {last6Months.map((month) => <li class:list={{ 'is-current': month.key === currentMonth }}>{month.label}</li>)}
+        </ul>
       </div>
-      <ul class="cpa-month-labels">
-        {last6Months.map((month) => <li class:list={{ 'is-current': month.key === currentMonth }}>{month.label}</li>)}
-      </ul>
-      <p class="cpa-compare-foot">近 6 个月月度总量，柱状高亮为本月</p>
+
+      <div class="cpa-compare-block">
+        <div class="cpa-compare-block-head">
+          <h3>每季度对比</h3>
+          <span>近 4 个季度</span>
+        </div>
+        <div class="cpa-compare-nums">
+          <div class="cpa-compare-cell">
+            <span>本季 · {currentQuarter}</span>
+            <strong>{hours(quarterCurrent)}<em>小时</em></strong>
+          </div>
+          <div class="cpa-compare-cell is-muted">
+            <span>上季 · {previousQuarter}</span>
+            <strong>{hours(quarterPrevious)}<em>小时</em></strong>
+          </div>
+          <span class:list={['cpa-delta', deltaClass(quarterDelta)]}>{deltaText(quarterDelta)}</span>
+        </div>
+        <div class="cpa-mini-bars">
+          {last4Quarters.map((quarter) => (
+            <div class="cpa-mini-col">
+              <div
+                class:list={['cpa-mini-bar', { 'is-today': quarter.key === currentQuarter, 'is-zero': quarter.minutes === 0 }]}
+                style={`height:${quarter.minutes > 0 ? Math.max(4, (quarter.minutes / quarterScale) * 100) : 0}%`}
+                data-tip={`${quarter.key} · ${hours(quarter.minutes)} 小时`}
+              />
+            </div>
+          ))}
+        </div>
+        <ul class="cpa-period-labels">
+          {last4Quarters.map((quarter) => <li class:list={{ 'is-current': quarter.key === currentQuarter }}>{quarter.label}</li>)}
+        </ul>
+      </div>
     </div>
+    <p class="cpa-compare-foot">柱状为各周期总量，高亮为当前月 / 当前季度；上期无记录时不做百分比对比。</p>
   </section>
 
   <section class="cpa-card cpa-mistakes">
@@ -429,26 +597,6 @@ const statusText: Record<string, string> = {
 </div>
 
 <script>
-  const compare = document.querySelector('[data-cpa-compare]');
-  if (compare) {
-    const buttons = compare.querySelectorAll<HTMLButtonElement>('[data-cpa-mode]');
-    const panes = compare.querySelectorAll<HTMLElement>('[data-cpa-pane]');
-    buttons.forEach((button) => {
-      button.addEventListener('click', () => {
-        const mode = button.dataset.cpaMode;
-        compare.setAttribute('data-mode', mode ?? 'day');
-        buttons.forEach((item) => {
-          const active = item === button;
-          item.classList.toggle('is-active', active);
-          item.setAttribute('aria-pressed', String(active));
-        });
-        panes.forEach((pane) =>
-          pane.classList.toggle('is-active', pane.dataset.cpaPane === mode),
-        );
-      });
-    });
-  }
-
   const dialog = document.getElementById(
     'cpa-mistake-dialog',
   ) as HTMLDialogElement | null;

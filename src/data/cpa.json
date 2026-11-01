@@ -2,6 +2,12 @@
   "dataStatus": "live",
   "statusNote": "2026-10-13 起开始记录学习时长。",
   "goalMinutesPerDay": 120,
+  "exam": {
+    "label": "2027 年 会计",
+    "date": "2027-08-28",
+    "challengeEnd": "2031-12-31",
+    "note": "预计"
+  },
   "plan": {
     "title": "五年考试挑战",
     "startYear": 2027,

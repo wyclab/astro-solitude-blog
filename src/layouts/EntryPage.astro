@@ -338,7 +338,7 @@ const commentsEnabled =
               {Content && <Content components={components} />}
             </Links>
           ) : type === 'project' ? (
-            <Project data={pageData(p.data, 'project')} comment={p.comment} />
+            <Project data={pageData(p.data, 'project')} />
           ) : type === 'cpa' ? (
             <CpaDashboard
               title={route.title}

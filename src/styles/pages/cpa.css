@@ -435,7 +435,7 @@ body[data-type='cpa'] #page {
   border-radius: 3px;
 }
 
-.cpa-legend-swatch.is-study {
+.cpa-legend-swatch.is-listen {
   background: linear-gradient(180deg, var(--efu-main), var(--efu-main-op-deep));
 }
 
@@ -515,7 +515,7 @@ body[data-type='cpa'] #page {
   width: 100%;
 }
 
-.cpa-bar-seg.is-study {
+.cpa-bar-seg.is-listen {
   background: linear-gradient(180deg, var(--efu-main), var(--efu-main-op-deep));
 }
 

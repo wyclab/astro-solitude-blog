@@ -12,16 +12,27 @@ const DAY = 86400000;
 const isoOf = (ms: number) => new Date(ms).toISOString().slice(0, 10);
 const WEEKDAY = ['日', '一', '二', '三', '四', '五', '六'];
 
-const daily = data.daily as Record<string, number>;
-const practice = ((data as { practice?: Record<string, number> }).practice ?? {}) as Record<string, number>;
-const keys = Object.keys(daily).sort();
+/* 口径：listen = 听课时长，practice = 做题时长，学习时长 = 听课 + 做题 */
+const rawData = data as {
+  listen?: Record<string, number>;
+  daily?: Record<string, number>;
+  practice?: Record<string, number>;
+};
+// 兼容旧字段 daily（等同听课时长）
+const listen: Record<string, number> = {
+  ...(rawData.daily ?? {}),
+  ...(rawData.listen ?? {}),
+};
+const practice: Record<string, number> = rawData.practice ?? {};
+const keys = [...new Set([...Object.keys(listen), ...Object.keys(practice)])].sort();
 const refMs = keys.length
   ? Date.parse(`${keys[keys.length - 1]}T00:00:00Z`)
   : Date.now();
 const ref = isoOf(refMs);
 const shift = (n: number) => refMs + n * DAY;
-const minutesOf = (key: string) => daily[key] ?? 0;
+const listenOf = (key: string) => listen[key] ?? 0;
 const practiceOf = (key: string) => practice[key] ?? 0;
+const studyOf = (key: string) => listenOf(key) + practiceOf(key);
 const shortDate = (key: string) => `${+key.slice(5, 7)}/${+key.slice(8, 10)}`;
 const weekdayOf = (key: string) =>
   WEEKDAY[new Date(`${key}T00:00:00Z`).getUTCDay()];
@@ -34,18 +45,18 @@ const spanDays = Math.min(
 );
 const recent = Array.from({ length: spanDays }, (_, i) => {
   const key = isoOf(shift(i - (spanDays - 1)));
-  const studied = minutesOf(key);
+  const listened = listenOf(key);
   const practiced = practiceOf(key);
   return {
     key,
     label: shortDate(key),
     weekday: weekdayOf(key),
-    minutes: studied,
+    listen: listened,
     practice: practiced,
-    total: studied + practiced,
+    study: listened + practiced,
   };
 });
-const chartMax = Math.max(60, ...recent.map((d) => d.total));
+const chartMax = Math.max(60, ...recent.map((d) => d.study));
 const scaleMax = Math.ceil(chartMax / 30) * 30;
 const heightPct = (minutes: number) =>
   minutes > 0 ? Math.max(4, (minutes / scaleMax) * 100) : 0;
@@ -55,42 +66,45 @@ const goal = data.goalMinutesPerDay;
 const goalPct = Math.min(100, (goal / scaleMax) * 100);
 
 /* ---- 汇总 ---- */
-const allMinutes = Object.values(daily);
-const allPractice = Object.values(practice);
-const totalMinutes = allMinutes.reduce((sum, m) => sum + m, 0);
-const totalPractice = allPractice.reduce((sum, m) => sum + m, 0);
-const studyDays = allMinutes.filter((m) => m > 0).length;
-const practiceDays = allPractice.filter((m) => m > 0).length;
-const avgMinutes = studyDays ? Math.round(totalMinutes / studyDays) : 0;
+const listenValues = Object.values(listen);
+const practiceValues = Object.values(practice);
+const totalListen = listenValues.reduce((sum, m) => sum + m, 0);
+const totalPractice = practiceValues.reduce((sum, m) => sum + m, 0);
+const totalStudy = totalListen + totalPractice;
+const listenDays = listenValues.filter((m) => m > 0).length;
+const practiceDays = practiceValues.filter((m) => m > 0).length;
+const studyDays = keys.filter((key) => studyOf(key) > 0).length;
+const avgListen = listenDays ? Math.round(totalListen / listenDays) : 0;
 const avgPractice = practiceDays
   ? Math.round(totalPractice / practiceDays)
   : 0;
+const avgStudy = studyDays ? Math.round(totalStudy / studyDays) : 0;
 const sumRange = (
   from: number,
   to: number,
-  of: (key: string) => number = minutesOf,
+  of: (key: string) => number = listenOf,
 ) => {
   let sum = 0;
   for (let i = from; i <= to; i++) sum += of(isoOf(shift(i)));
   return sum;
 };
-const weekMinutes = sumRange(-6, 0);
+const weekListen = sumRange(-6, 0);
 const weekPractice = sumRange(-6, 0, practiceOf);
-const hitDays = recent.filter((d) => d.total >= goal).length;
+const weekStudy = weekListen + weekPractice;
+const hitDays = recent.filter((d) => d.study >= goal).length;
 
-/* ---- 连续打卡（学习或做题任一项有记录即算） ---- */
-const activeMinutesOf = (key: string) => minutesOf(key) + practiceOf(key);
+/* ---- 连续打卡（听课或做题任一项有记录即算） ---- */
 let streak = 0;
 for (let i = 0; i < 400; i++) {
-  if (activeMinutesOf(isoOf(shift(-i))) > 0) streak++;
+  if (studyOf(isoOf(shift(-i))) > 0) streak++;
   else break;
 }
 
-/* ---- 按月聚合 ---- */
+/* ---- 按月聚合（学习时长 = 听课 + 做题） ---- */
 const monthTotals: Record<string, number> = {};
-for (const [key, value] of Object.entries(daily)) {
+for (const key of keys) {
   const month = key.slice(0, 7);
-  monthTotals[month] = (monthTotals[month] ?? 0) + value;
+  monthTotals[month] = (monthTotals[month] ?? 0) + studyOf(key);
 }
 const monthKeys: string[] = [];
 {
@@ -117,9 +131,9 @@ const monthScale = Math.ceil(monthMax / 60) * 60;
 const quarterOf = (key: string) =>
   `${key.slice(2, 4)}Q${Math.floor((+key.slice(5, 7) - 1) / 3) + 1}`;
 const quarterTotals: Record<string, number> = {};
-for (const [key, value] of Object.entries(daily)) {
+for (const key of keys) {
   const quarter = quarterOf(key);
-  quarterTotals[quarter] = (quarterTotals[quarter] ?? 0) + value;
+  quarterTotals[quarter] = (quarterTotals[quarter] ?? 0) + studyOf(key);
 }
 const refYear = +ref.slice(0, 4);
 const refQuarterIndex = Math.floor((+ref.slice(5, 7) - 1) / 3);
@@ -157,9 +171,9 @@ const heatWeeks = Array.from({ length: heatWeeksCount }, (_, w) =>
     return {
       key,
       label: shortDate(key),
-      minutes: minutesOf(key),
+      listen: listenOf(key),
       practice: practiceOf(key),
-      total: activeMinutesOf(key),
+      study: studyOf(key),
       future: ms > refMs,
     };
   }),
@@ -168,10 +182,10 @@ const heatLevel = (minutes: number) =>
   minutes <= 0 ? 0 : minutes <= 30 ? 1 : minutes <= 60 ? 2 : minutes <= 120 ? 3 : 4;
 const heatCells = heatWeeks.flat();
 const heatPastDays = heatCells.filter((d) => !d.future).length;
-const heatDays = heatCells.filter((d) => d.total > 0).length;
-const heatMinutes = heatCells.reduce((sum, d) => sum + d.total, 0);
+const heatDays = heatCells.filter((d) => d.study > 0).length;
+const heatMinutes = heatCells.reduce((sum, d) => sum + d.study, 0);
 const heatMiss = heatCells.filter(
-  (d) => !d.future && Date.parse(`${d.key}T00:00:00Z`) >= firstMs && d.total === 0,
+  (d) => !d.future && Date.parse(`${d.key}T00:00:00Z`) >= firstMs && d.study === 0,
 ).length;
 const heatRange = `${shortDate(isoOf(heatStartMs))} – ${shortDate(ref)}`;
 
@@ -181,7 +195,7 @@ let maxStreak = 0;
   let run = 0;
   const daysTotal = Math.round((refMs - firstMs) / DAY) + 1;
   for (let i = 0; i < daysTotal; i++) {
-    if (activeMinutesOf(isoOf(firstMs + i * DAY)) > 0) {
+    if (studyOf(isoOf(firstMs + i * DAY)) > 0) {
       run += 1;
       if (run > maxStreak) maxStreak = run;
     } else run = 0;
@@ -266,8 +280,8 @@ const statusText: Record<string, string> = {
   <ul class="cpa-kpis">
     <li class="cpa-kpi">
       <span class="cpa-kpi-label">累计学习</span>
-      <strong class="cpa-kpi-value">{hours(totalMinutes)}<em>小时</em></strong>
-      <span class="cpa-kpi-foot">共 {studyDays} 个学习日 · 做题 {hours(totalPractice)} 小时</span>
+      <strong class="cpa-kpi-value">{hours(totalStudy)}<em>小时</em></strong>
+      <span class="cpa-kpi-foot">听课 {hours(totalListen)} 小时 · 做题 {hours(totalPractice)} 小时</span>
     </li>
     <li class="cpa-kpi">
       <span class="cpa-kpi-label">连续打卡</span>
@@ -342,15 +356,15 @@ const statusText: Record<string, string> = {
   <div class="cpa-grid">
     <section class="cpa-card cpa-chart-card">
       <div class="cpa-card-head">
-        <h2><i class="solitude fas fa-chart-simple" aria-hidden="true"></i>每日学习与做题时长</h2>
+        <h2><i class="solitude fas fa-chart-simple" aria-hidden="true"></i>每日学习时长（听课 + 做题）</h2>
         <span class="cpa-chip">近 {spanDays} 天</span>
       </div>
       <ul class="cpa-legend">
-        <li><i class="cpa-legend-swatch is-study" aria-hidden="true"></i>学习时长</li>
+        <li><i class="cpa-legend-swatch is-listen" aria-hidden="true"></i>听课时长</li>
         <li><i class="cpa-legend-swatch is-practice" aria-hidden="true"></i>做题时长</li>
       </ul>
       <div class="cpa-chart" style={`--cpa-goal:${goalPct / 100}`}>
-        <div class="cpa-chart-goal" aria-hidden="true"><span>{goal} 分钟目标</span></div>
+        <div class="cpa-chart-goal" aria-hidden="true"><span>{goal} 分钟学习目标</span></div>
         <div class="cpa-bars">
           {recent.map((day) => (
             <div class="cpa-bar-col">
@@ -360,22 +374,22 @@ const statusText: Record<string, string> = {
                     'cpa-bar-stack',
                     {
                       'is-today': day.key === ref,
-                      'is-zero': day.total === 0,
-                      'is-hit': day.total >= goal,
+                      'is-zero': day.study === 0,
+                      'is-hit': day.study >= goal,
                     },
                   ]}
-                  style={`height:${heightPct(day.total)}%`}
-                  data-tip={`${day.label} 周${day.weekday} · 学习 ${day.minutes} 分 · 做题 ${day.practice} 分 · 合计 ${day.total} 分`}
+                  style={`height:${heightPct(day.study)}%`}
+                  data-tip={`${day.label} 周${day.weekday} · 听课 ${day.listen} 分 · 做题 ${day.practice} 分 · 学习 ${day.study} 分`}
                 >
-                  {day.total > 0 && (
+                  {day.study > 0 && (
                     <>
                       <span
-                        class="cpa-bar-seg is-study"
-                        style={`height:${sharePct(day.minutes, day.total)}%`}
+                        class="cpa-bar-seg is-listen"
+                        style={`height:${sharePct(day.listen, day.study)}%`}
                       />
                       <span
                         class="cpa-bar-seg is-practice"
-                        style={`height:${sharePct(day.practice, day.total)}%`}
+                        style={`height:${sharePct(day.practice, day.study)}%`}
                       />
                     </>
                   )}
@@ -387,26 +401,27 @@ const statusText: Record<string, string> = {
         </div>
       </div>
       <ul class="cpa-chart-foot">
-        <li><span>学习日均</span><strong>{avgMinutes} 分钟</strong></li>
+        <li><span>学习日均</span><strong>{avgStudy} 分钟</strong></li>
+        <li><span>听课日均</span><strong>{avgListen} 分钟</strong></li>
         <li><span>做题日均</span><strong>{avgPractice} 分钟</strong></li>
-        <li><span>单日最高</span><strong>{Math.max(...recent.map((d) => d.total))} 分钟</strong></li>
+        <li><span>单日最高</span><strong>{Math.max(...recent.map((d) => d.study))} 分钟</strong></li>
         <li><span>达标天数</span><strong>{hitDays} / {spanDays}</strong></li>
       </ul>
     </section>
 
     <section class="cpa-card cpa-total">
       <div class="cpa-card-head">
-        <h2><i class="solitude fas fa-hourglass-half" aria-hidden="true"></i>累计学习与做题时长</h2>
+        <h2><i class="solitude fas fa-hourglass-half" aria-hidden="true"></i>累计学习时长</h2>
       </div>
-      <p class="cpa-total-value">{hours(totalMinutes)}<span>小时学习</span></p>
-      <p class="cpa-total-sub">做题 {hours(totalPractice)} 小时 · 合计 {hours(totalMinutes + totalPractice)} 小时 · 平均每天 {avgMinutes} 分钟</p>
+      <p class="cpa-total-value">{hours(totalStudy)}<span>小时</span></p>
+      <p class="cpa-total-sub">听课 {hours(totalListen)} 小时 + 做题 {hours(totalPractice)} 小时 · 平均每天 {avgStudy} 分钟</p>
       <ul class="cpa-total-list">
-        <li><span>本周学习</span><strong>{hours(weekMinutes)} 小时</strong></li>
+        <li><span>本周学习</span><strong>{hours(weekStudy)} 小时</strong></li>
+        <li><span>本周听课</span><strong>{hours(weekListen)} 小时</strong></li>
         <li><span>本周做题</span><strong>{hours(weekPractice)} 小时</strong></li>
-        <li><span>本月学习</span><strong>{hours(monthCurrent)} 小时</strong></li>
+        <li><span>累计听课</span><strong>{hours(totalListen)} 小时</strong></li>
         <li><span>累计做题</span><strong>{hours(totalPractice)} 小时</strong></li>
         <li><span>学习日</span><strong>{studyDays} 天</strong></li>
-        <li><span>日均学习</span><strong>{avgMinutes} 分钟</strong></li>
       </ul>
     </section>
   </div>
@@ -429,13 +444,13 @@ const statusText: Record<string, string> = {
                   <div
                     class:list={[
                       'cpa-heat-cell',
-                      `is-l${heatLevel(day.total)}`,
+                      `is-l${heatLevel(day.study)}`,
                       { 'is-future': day.future, 'is-today': day.key === ref },
                     ]}
                     data-tip={
                       day.future
                         ? `${day.label} · 未到`
-                        : `${day.label} · 学习 ${day.minutes} 分 · 做题 ${day.practice} 分`
+                        : `${day.label} · 听课 ${day.listen} 分 · 做题 ${day.practice} 分`
                     }
                   />
                 ))}

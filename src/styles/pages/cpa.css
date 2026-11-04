@@ -11,10 +11,17 @@ body[data-type='cpa'] #page {
   --cpa-radius: 12px;
   --cpa-chart-h: 220px;
   --cpa-chart-label: 20px;
+  --cpa-practice: var(--efu-orange);
+  --cpa-practice-deep: color-mix(in srgb, var(--cpa-practice) 78%, var(--efu-black));
   display: flex;
   flex-direction: column;
   gap: var(--cpa-gap);
   width: 100%;
+}
+
+/* 暗色模式下主色为琥珀，做题改用蓝色以保证两段可区分 */
+[data-theme='dark'] .cpa {
+  --cpa-practice: var(--efu-blue);
 }
 
 /* ---------- 头部 ---------- */
@@ -404,6 +411,38 @@ body[data-type='cpa'] #page {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.cpa-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin: 2px 0 10px;
+  padding: 0;
+  list-style: none;
+}
+
+.cpa-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--efu-secondtext);
+}
+
+.cpa-legend-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.cpa-legend-swatch.is-study {
+  background: linear-gradient(180deg, var(--efu-main), var(--efu-main-op-deep));
+}
+
+.cpa-legend-swatch.is-practice {
+  background: linear-gradient(180deg, var(--cpa-practice), var(--cpa-practice-deep));
+}
+
 .cpa-chart {
   position: relative;
   height: var(--cpa-chart-h);
@@ -413,7 +452,11 @@ body[data-type='cpa'] #page {
   position: absolute;
   right: 0;
   left: 0;
-  bottom: calc(var(--cpa-chart-label) + var(--cpa-goal) * 2px);
+  /* 目标线按柱区可用高度定位，随图表高度自适应（原 2px 步进只在 200px 柱区准确） */
+  bottom: calc(
+    var(--cpa-chart-label) +
+      (100% - var(--cpa-chart-label)) * var(--cpa-goal)
+  );
   border-top: 1px dashed var(--efu-main-op-deep);
   pointer-events: none;
 }
@@ -457,33 +500,44 @@ body[data-type='cpa'] #page {
   height: calc(100% - var(--cpa-chart-label));
 }
 
-.cpa-bar {
+.cpa-bar-stack {
   position: relative;
+  display: flex;
+  flex-direction: column-reverse;
   width: 100%;
+  overflow: hidden;
   border-radius: 5px 5px 3px 3px;
-  background: linear-gradient(180deg, var(--efu-main), var(--efu-main-op-deep));
-  opacity: .85;
   transition: opacity .2s, transform .2s;
 }
 
-.cpa-bar.is-zero {
+.cpa-bar-seg {
+  display: block;
+  width: 100%;
+}
+
+.cpa-bar-seg.is-study {
+  background: linear-gradient(180deg, var(--efu-main), var(--efu-main-op-deep));
+}
+
+.cpa-bar-seg.is-practice {
+  background: linear-gradient(180deg, var(--cpa-practice), var(--cpa-practice-deep));
+}
+
+.cpa-bar-stack.is-zero {
   height: 2px !important;
   border-radius: 2px;
   background: var(--efu-card-border);
-  opacity: 1;
 }
 
-.cpa-bar.is-today {
-  opacity: 1;
+.cpa-bar-stack.is-today {
   box-shadow: 0 0 0 1px var(--efu-main);
 }
 
-.cpa-bar:hover {
-  opacity: 1;
+.cpa-bar-stack:hover {
   transform: translateY(-2px);
 }
 
-.cpa-bar[data-tip]:hover::after,
+.cpa-bar-stack[data-tip]:hover::after,
 .cpa-mini-bar[data-tip]:hover::after,
 .cpa-heat-cell[data-tip]:hover::after {
   content: attr(data-tip);

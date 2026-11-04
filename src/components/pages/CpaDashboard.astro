@@ -13,6 +13,7 @@ const isoOf = (ms: number) => new Date(ms).toISOString().slice(0, 10);
 const WEEKDAY = ['日', '一', '二', '三', '四', '五', '六'];
 
 const daily = data.daily as Record<string, number>;
+const practice = ((data as { practice?: Record<string, number> }).practice ?? {}) as Record<string, number>;
 const keys = Object.keys(daily).sort();
 const refMs = keys.length
   ? Date.parse(`${keys[keys.length - 1]}T00:00:00Z`)
@@ -20,6 +21,7 @@ const refMs = keys.length
 const ref = isoOf(refMs);
 const shift = (n: number) => refMs + n * DAY;
 const minutesOf = (key: string) => daily[key] ?? 0;
+const practiceOf = (key: string) => practice[key] ?? 0;
 const shortDate = (key: string) => `${+key.slice(5, 7)}/${+key.slice(8, 10)}`;
 const weekdayOf = (key: string) =>
   WEEKDAY[new Date(`${key}T00:00:00Z`).getUTCDay()];
@@ -32,37 +34,55 @@ const spanDays = Math.min(
 );
 const recent = Array.from({ length: spanDays }, (_, i) => {
   const key = isoOf(shift(i - (spanDays - 1)));
+  const studied = minutesOf(key);
+  const practiced = practiceOf(key);
   return {
     key,
     label: shortDate(key),
     weekday: weekdayOf(key),
-    minutes: minutesOf(key),
+    minutes: studied,
+    practice: practiced,
+    total: studied + practiced,
   };
 });
-const chartMax = Math.max(60, ...recent.map((d) => d.minutes));
+const chartMax = Math.max(60, ...recent.map((d) => d.total));
 const scaleMax = Math.ceil(chartMax / 30) * 30;
 const heightPct = (minutes: number) =>
   minutes > 0 ? Math.max(4, (minutes / scaleMax) * 100) : 0;
+const sharePct = (part: number, whole: number) =>
+  whole > 0 ? (part / whole) * 100 : 0;
 const goal = data.goalMinutesPerDay;
 const goalPct = Math.min(100, (goal / scaleMax) * 100);
 
 /* ---- 汇总 ---- */
 const allMinutes = Object.values(daily);
+const allPractice = Object.values(practice);
 const totalMinutes = allMinutes.reduce((sum, m) => sum + m, 0);
+const totalPractice = allPractice.reduce((sum, m) => sum + m, 0);
 const studyDays = allMinutes.filter((m) => m > 0).length;
+const practiceDays = allPractice.filter((m) => m > 0).length;
 const avgMinutes = studyDays ? Math.round(totalMinutes / studyDays) : 0;
-const sumRange = (from: number, to: number) => {
+const avgPractice = practiceDays
+  ? Math.round(totalPractice / practiceDays)
+  : 0;
+const sumRange = (
+  from: number,
+  to: number,
+  of: (key: string) => number = minutesOf,
+) => {
   let sum = 0;
-  for (let i = from; i <= to; i++) sum += minutesOf(isoOf(shift(i)));
+  for (let i = from; i <= to; i++) sum += of(isoOf(shift(i)));
   return sum;
 };
 const weekMinutes = sumRange(-6, 0);
-const hitDays = recent.filter((d) => d.minutes >= goal).length;
+const weekPractice = sumRange(-6, 0, practiceOf);
+const hitDays = recent.filter((d) => d.total >= goal).length;
 
-/* ---- 连续打卡 ---- */
+/* ---- 连续打卡（学习或做题任一项有记录即算） ---- */
+const activeMinutesOf = (key: string) => minutesOf(key) + practiceOf(key);
 let streak = 0;
 for (let i = 0; i < 400; i++) {
-  if (minutesOf(isoOf(shift(-i))) > 0) streak++;
+  if (activeMinutesOf(isoOf(shift(-i))) > 0) streak++;
   else break;
 }
 
@@ -138,6 +158,8 @@ const heatWeeks = Array.from({ length: heatWeeksCount }, (_, w) =>
       key,
       label: shortDate(key),
       minutes: minutesOf(key),
+      practice: practiceOf(key),
+      total: activeMinutesOf(key),
       future: ms > refMs,
     };
   }),
@@ -146,10 +168,10 @@ const heatLevel = (minutes: number) =>
   minutes <= 0 ? 0 : minutes <= 30 ? 1 : minutes <= 60 ? 2 : minutes <= 120 ? 3 : 4;
 const heatCells = heatWeeks.flat();
 const heatPastDays = heatCells.filter((d) => !d.future).length;
-const heatDays = heatCells.filter((d) => d.minutes > 0).length;
-const heatMinutes = heatCells.reduce((sum, d) => sum + d.minutes, 0);
+const heatDays = heatCells.filter((d) => d.total > 0).length;
+const heatMinutes = heatCells.reduce((sum, d) => sum + d.total, 0);
 const heatMiss = heatCells.filter(
-  (d) => !d.future && Date.parse(`${d.key}T00:00:00Z`) >= firstMs && d.minutes === 0,
+  (d) => !d.future && Date.parse(`${d.key}T00:00:00Z`) >= firstMs && d.total === 0,
 ).length;
 const heatRange = `${shortDate(isoOf(heatStartMs))} – ${shortDate(ref)}`;
 
@@ -159,7 +181,7 @@ let maxStreak = 0;
   let run = 0;
   const daysTotal = Math.round((refMs - firstMs) / DAY) + 1;
   for (let i = 0; i < daysTotal; i++) {
-    if (minutesOf(isoOf(firstMs + i * DAY)) > 0) {
+    if (activeMinutesOf(isoOf(firstMs + i * DAY)) > 0) {
       run += 1;
       if (run > maxStreak) maxStreak = run;
     } else run = 0;
@@ -245,7 +267,7 @@ const statusText: Record<string, string> = {
     <li class="cpa-kpi">
       <span class="cpa-kpi-label">累计学习</span>
       <strong class="cpa-kpi-value">{hours(totalMinutes)}<em>小时</em></strong>
-      <span class="cpa-kpi-foot">共 {studyDays} 个学习日</span>
+      <span class="cpa-kpi-foot">共 {studyDays} 个学习日 · 做题 {hours(totalPractice)} 小时</span>
     </li>
     <li class="cpa-kpi">
       <span class="cpa-kpi-label">连续打卡</span>
@@ -320,10 +342,14 @@ const statusText: Record<string, string> = {
   <div class="cpa-grid">
     <section class="cpa-card cpa-chart-card">
       <div class="cpa-card-head">
-        <h2><i class="solitude fas fa-chart-simple" aria-hidden="true"></i>每日学习时长</h2>
+        <h2><i class="solitude fas fa-chart-simple" aria-hidden="true"></i>每日学习与做题时长</h2>
         <span class="cpa-chip">近 {spanDays} 天</span>
       </div>
-      <div class="cpa-chart" style={`--cpa-goal:${goalPct}`}>
+      <ul class="cpa-legend">
+        <li><i class="cpa-legend-swatch is-study" aria-hidden="true"></i>学习时长</li>
+        <li><i class="cpa-legend-swatch is-practice" aria-hidden="true"></i>做题时长</li>
+      </ul>
+      <div class="cpa-chart" style={`--cpa-goal:${goalPct / 100}`}>
         <div class="cpa-chart-goal" aria-hidden="true"><span>{goal} 分钟目标</span></div>
         <div class="cpa-bars">
           {recent.map((day) => (
@@ -331,16 +357,29 @@ const statusText: Record<string, string> = {
               <div class="cpa-bar-track">
                 <div
                   class:list={[
-                    'cpa-bar',
+                    'cpa-bar-stack',
                     {
                       'is-today': day.key === ref,
-                      'is-zero': day.minutes === 0,
-                      'is-hit': day.minutes >= goal,
+                      'is-zero': day.total === 0,
+                      'is-hit': day.total >= goal,
                     },
                   ]}
-                  style={`height:${heightPct(day.minutes)}%`}
-                  data-tip={`${day.label} 周${day.weekday} · ${day.minutes} 分钟`}
-                />
+                  style={`height:${heightPct(day.total)}%`}
+                  data-tip={`${day.label} 周${day.weekday} · 学习 ${day.minutes} 分 · 做题 ${day.practice} 分 · 合计 ${day.total} 分`}
+                >
+                  {day.total > 0 && (
+                    <>
+                      <span
+                        class="cpa-bar-seg is-study"
+                        style={`height:${sharePct(day.minutes, day.total)}%`}
+                      />
+                      <span
+                        class="cpa-bar-seg is-practice"
+                        style={`height:${sharePct(day.practice, day.total)}%`}
+                      />
+                    </>
+                  )}
+                </div>
               </div>
               <span class="cpa-bar-label">{day.label}</span>
             </div>
@@ -348,23 +387,26 @@ const statusText: Record<string, string> = {
         </div>
       </div>
       <ul class="cpa-chart-foot">
-        <li><span>日均</span><strong>{avgMinutes} 分钟</strong></li>
-        <li><span>单日最高</span><strong>{Math.max(...recent.map((d) => d.minutes))} 分钟</strong></li>
+        <li><span>学习日均</span><strong>{avgMinutes} 分钟</strong></li>
+        <li><span>做题日均</span><strong>{avgPractice} 分钟</strong></li>
+        <li><span>单日最高</span><strong>{Math.max(...recent.map((d) => d.total))} 分钟</strong></li>
         <li><span>达标天数</span><strong>{hitDays} / {spanDays}</strong></li>
       </ul>
     </section>
 
     <section class="cpa-card cpa-total">
       <div class="cpa-card-head">
-        <h2><i class="solitude fas fa-hourglass-half" aria-hidden="true"></i>累计总学习时长</h2>
+        <h2><i class="solitude fas fa-hourglass-half" aria-hidden="true"></i>累计学习与做题时长</h2>
       </div>
-      <p class="cpa-total-value">{hours(totalMinutes)}<span>小时</span></p>
-      <p class="cpa-total-sub">约 {Math.round(totalMinutes / 60)} 小时 · 平均每天 {avgMinutes} 分钟</p>
+      <p class="cpa-total-value">{hours(totalMinutes)}<span>小时学习</span></p>
+      <p class="cpa-total-sub">做题 {hours(totalPractice)} 小时 · 合计 {hours(totalMinutes + totalPractice)} 小时 · 平均每天 {avgMinutes} 分钟</p>
       <ul class="cpa-total-list">
-        <li><span>本周</span><strong>{hours(weekMinutes)} 小时</strong></li>
-        <li><span>本月</span><strong>{hours(monthCurrent)} 小时</strong></li>
+        <li><span>本周学习</span><strong>{hours(weekMinutes)} 小时</strong></li>
+        <li><span>本周做题</span><strong>{hours(weekPractice)} 小时</strong></li>
+        <li><span>本月学习</span><strong>{hours(monthCurrent)} 小时</strong></li>
+        <li><span>累计做题</span><strong>{hours(totalPractice)} 小时</strong></li>
         <li><span>学习日</span><strong>{studyDays} 天</strong></li>
-        <li><span>日均</span><strong>{avgMinutes} 分钟</strong></li>
+        <li><span>日均学习</span><strong>{avgMinutes} 分钟</strong></li>
       </ul>
     </section>
   </div>
@@ -387,10 +429,14 @@ const statusText: Record<string, string> = {
                   <div
                     class:list={[
                       'cpa-heat-cell',
-                      `is-l${heatLevel(day.minutes)}`,
+                      `is-l${heatLevel(day.total)}`,
                       { 'is-future': day.future, 'is-today': day.key === ref },
                     ]}
-                    data-tip={day.future ? `${day.label} · 未到` : `${day.label} · ${day.minutes} 分钟`}
+                    data-tip={
+                      day.future
+                        ? `${day.label} · 未到`
+                        : `${day.label} · 学习 ${day.minutes} 分 · 做题 ${day.practice} 分`
+                    }
                   />
                 ))}
               </div>

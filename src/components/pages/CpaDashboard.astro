@@ -191,6 +191,8 @@ const plan = data.plan;
 
 /* ---- 错题 ---- */
 const mistakes = data.mistakes;
+const mistakeBookUrl = data.mistakeBook?.url ?? '';
+const mistakeBookLabel = data.mistakeBook?.label ?? '错题本';
 const mistakeTimes = mistakes.reduce((sum, m) => sum + (m.count ?? 1), 0);
 const pendingDetails = mistakes.filter((m) => m.pending).length;
 const subjectStats = Object.entries(
@@ -255,10 +257,24 @@ const statusText: Record<string, string> = {
       <strong class="cpa-kpi-value">{passedCount}<em>/ {subjects.length}</em></strong>
       <span class="cpa-kpi-foot">{learningCount} 科备考中</span>
     </li>
-    <li class="cpa-kpi">
-      <span class="cpa-kpi-label">错题条目</span>
-      <strong class="cpa-kpi-value">{mistakes.length}<em>条</em></strong>
-      <span class="cpa-kpi-foot">累计 {mistakeTimes} 次出错</span>
+    <li class:list={['cpa-kpi', { 'is-link': Boolean(mistakeBookUrl) }]}>
+      {mistakeBookUrl ? (
+        <a
+          class="cpa-kpi-link"
+          href={mistakeBookUrl}
+          aria-label={`打开${mistakeBookLabel}：共 ${mistakes.length} 条错题，累计 ${mistakeTimes} 次出错`}
+        >
+          <span class="cpa-kpi-label">错题条目</span>
+          <strong class="cpa-kpi-value">{mistakes.length}<em>条</em></strong>
+          <span class="cpa-kpi-foot">累计 {mistakeTimes} 次出错 · 查看{mistakeBookLabel} <i class="solitude fas fa-arrow-right" aria-hidden="true" /></span>
+        </a>
+      ) : (
+        <>
+          <span class="cpa-kpi-label">错题条目</span>
+          <strong class="cpa-kpi-value">{mistakes.length}<em>条</em></strong>
+          <span class="cpa-kpi-foot">累计 {mistakeTimes} 次出错</span>
+        </>
+      )}
     </li>
   </ul>
 
@@ -503,12 +519,30 @@ const statusText: Record<string, string> = {
   <section class="cpa-card cpa-mistakes">
     <div class="cpa-card-head">
       <h2><i class="solitude fas fa-list-check" aria-hidden="true"></i>错题统计</h2>
-      <span class="cpa-chip">{mistakes.length} 条 · {mistakeTimes} 次</span>
+      <div class="cpa-mistakes-head-actions">
+        <span class="cpa-chip">{mistakes.length} 条 · {mistakeTimes} 次</span>
+        {mistakeBookUrl && (
+          <a class="cpa-book-link" href={mistakeBookUrl}>
+            <i class="solitude fas fa-book" aria-hidden="true"></i>{mistakeBookLabel}
+            <i class="solitude fas fa-arrow-right" aria-hidden="true"></i>
+          </a>
+        )}
+      </div>
     </div>
     <div class:list={['cpa-mistakes-grid', { 'is-empty': !mistakes.length }]}>
       {mistakes.length > 0 && (
         <div class="cpa-mistakes-side">
-          <p class="cpa-mistakes-total"><strong>{mistakeTimes}</strong><span>累计出错次数</span></p>
+          {mistakeBookUrl ? (
+            <a
+              class="cpa-mistakes-total"
+              href={mistakeBookUrl}
+              aria-label={`打开${mistakeBookLabel}（累计 ${mistakeTimes} 次出错）`}
+            >
+              <strong>{mistakeTimes}</strong><span>累计出错次数</span>
+            </a>
+          ) : (
+            <p class="cpa-mistakes-total"><strong>{mistakeTimes}</strong><span>累计出错次数</span></p>
+          )}
           <ul class="cpa-mistakes-subjects">
             {subjectStats.map(([name, count]) => (
               <li>
@@ -528,39 +562,47 @@ const statusText: Record<string, string> = {
 
       {mistakes.length ? (
         <ul class="cpa-mistake-list">
-          {mistakes.map((item) => (
-            <li>
-              <button
-                type="button"
-                class="cpa-mistake"
-                data-cpa-mistake
-                data-subject={item.subject}
-                data-chapter={item.chapter}
-                data-title={item.title}
-                data-date={item.date}
-                data-count={String(item.count ?? 1)}
-                data-reason={item.reason ?? ''}
-                data-status={item.status ?? ''}
-                data-detail={item.detail ?? ''}
-                data-pending={String(Boolean(item.pending))}
-                aria-label={`查看错题详情：${item.title}`}
-              >
-                <span class="cpa-mistake-main">
-                  <span class="cpa-mistake-title">{item.title}</span>
-                  <span class="cpa-mistake-meta">
-                    <span class="cpa-mistake-subject">{item.subject}</span>
-                    <span>{item.chapter}</span>
-                    <span>{shortDate(item.date)}</span>
+          {mistakes.map((item) => {
+            const Row = item.url ? 'a' : 'button';
+            return (
+              <li>
+                <Row
+                  class="cpa-mistake"
+                  href={item.url ?? undefined}
+                  type={item.url ? undefined : 'button'}
+                  data-cpa-mistake={item.url ? undefined : ''}
+                  data-subject={item.subject}
+                  data-chapter={item.chapter}
+                  data-title={item.title}
+                  data-date={item.date}
+                  data-count={String(item.count ?? 1)}
+                  data-reason={item.reason ?? ''}
+                  data-status={item.status ?? ''}
+                  data-detail={item.detail ?? ''}
+                  data-pending={String(Boolean(item.pending))}
+                  aria-label={item.url
+                    ? `打开${mistakeBookLabel}查看：${item.title}`
+                    : `查看错题详情：${item.title}`}
+                >
+                  <span class="cpa-mistake-main">
+                    <span class="cpa-mistake-title">{item.title}</span>
+                    <span class="cpa-mistake-meta">
+                      <span class="cpa-mistake-subject">{item.subject}</span>
+                      <span>{item.chapter}</span>
+                      <span>{shortDate(item.date)}</span>
+                    </span>
                   </span>
-                </span>
-                <span class="cpa-mistake-side">
-                  <span class:list={['cpa-mistake-status', item.status === '已复习' ? 'is-done' : 'is-todo']}>{item.status}</span>
-                  <span class="cpa-mistake-count">×{item.count ?? 1}</span>
-                  <i class="solitude fas fa-chevron-right" aria-hidden="true"></i>
-                </span>
-              </button>
-            </li>
-          ))}
+                  <span class="cpa-mistake-side">
+                    <span class:list={['cpa-mistake-status', item.status === '已复习' ? 'is-done' : 'is-todo']}>{item.status}</span>
+                    <span class="cpa-mistake-count">×{item.count ?? 1}</span>
+                    {item.url
+                      ? <i class="solitude fas fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                      : <i class="solitude fas fa-chevron-right" aria-hidden="true"></i>}
+                  </span>
+                </Row>
+              </li>
+            );
+          })}
         </ul>
       ) : (
         <p class="cpa-empty">还没有错题记录。录入后点击条目即可查看具体错题详情。</p>

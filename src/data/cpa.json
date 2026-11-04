@@ -121,5 +121,22 @@
       "topics": ["无形资产初始计量", "投资性房地产"]
     }
   ],
-  "mistakes": []
+  "mistakeBook": {
+    "label": "CPA 错题本",
+    "url": "/p/cpa-mistakes/"
+  },
+  "mistakes": [
+    {
+      "subject": "会计",
+      "chapter": "无形资产",
+      "title": "无形资产会计处理（多选）",
+      "date": "2026-11-04",
+      "count": 1,
+      "reason": "误选 D：忽略了非货币性资产交换需先判断是否具有商业实质、公允价值能否可靠计量。",
+      "status": "待复习",
+      "detail": "正确答案为 A、B、C。选项 D 表述绝对：只有具有商业实质且公允价值能够可靠计量时，才以公允价值为基础计量；否则以换出资产账面价值为基础计量。",
+      "pending": false,
+      "url": "/p/cpa-mistakes/"
+    }
+  ]
 }

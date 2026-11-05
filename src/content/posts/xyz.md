@@ -8,7 +8,7 @@ tags:
 - 域名
 - 建站笔记
 
-cover: 'https://static.wyclab.com/comtoxyz261025.png'
+cover: 'https://static.667667.xyz/comtoxyz261025.png'
 ---
 
 
@@ -19,7 +19,7 @@ cover: 'https://static.wyclab.com/comtoxyz261025.png'
 
 我让Gemini Argon画了一张图给我，Argon预测2030年域名续费价格将会达到121人民币：
 
-![image-20261025200625902](https://static.wyclab.com/image-20261025200625902261025.png)
+![image-20261025200625902](https://static.667667.xyz/image-20261025200625902261025.png)
 
 - 2012 年至 2020 年间，受美国商务部国家电信和信息管理局（NTIA）协议限制，注册局Verisign 的 `.com` 批发价被严格锁定在 $7.85/年，国内首年注册长期稳定在 55 元、续费稳定在 69 元。
 - 这一冻结状态直到 2018至2020年 发生转变——随着美国政府政策调整及 ICANN 与 Verisign 重新谈判并签署新协议，新协议以6 年为一个周期，当前周期为 2024 年 10 月 – 2030 年 10 月）。

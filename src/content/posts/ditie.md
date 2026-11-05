@@ -7,7 +7,7 @@ tags:
 - 社会
 - AI
 - 经济
-cover: 'https://static.wyclab.com/1793024560222261026.jpeg'
+cover: 'https://static.667667.xyz/1793024560222261026.jpeg'
 ---
 
 ## 地铁争执
@@ -34,4 +34,4 @@ cover: 'https://static.wyclab.com/1793024560222261026.jpeg'
 
 
 
-![人工智能vs就业友好](https://static.wyclab.com/image-20261026225905844261026.png)
+![人工智能vs就业友好](https://static.667667.xyz/image-20261026225905844261026.png)

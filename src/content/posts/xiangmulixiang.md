@@ -6,7 +6,7 @@ categories:
 tags:
 - 政策
 - 企业
-cover: 'https://static.wyclab.com/1792908734889261025.jpeg'
+cover: 'https://static.667667.xyz/1792908734889261025.jpeg'
 ---
 
 
@@ -29,5 +29,5 @@ cover: 'https://static.wyclab.com/1792908734889261025.jpeg'
 
 更多政策文件详见
 
-[文档传送门](https://wyclab.com/ecodoc/gov/gov_invest)
+[文档传送门](https://667667.xyz/ecodoc/gov/gov_invest)
 

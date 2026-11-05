@@ -25,7 +25,7 @@ const run = async () => {
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 
-  await page.goto('https://blog.wyclab.com/p/huangyan/', { waitUntil: 'networkidle' });
+  await page.goto('https://blog.667667.xyz/p/huangyan/', { waitUntil: 'networkidle' });
   await page.waitForTimeout(3000);
 
   const s1 = await page.evaluate(styleProbe);

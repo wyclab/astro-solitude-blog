@@ -6,7 +6,7 @@ categories:
 tags:
 - 金融
 - 政策
-cover: 'https://static.wyclab.com/IMG_8453260506.webp'
+cover: 'https://static.667667.xyz/IMG_8453260506.webp'
 ---
 
 

@@ -8,11 +8,11 @@ tags:
 - AI
 - 民企
 - 科技
-cover: 'https://static.wyclab.com/deepseek261025.webp'
+cover: 'https://static.667667.xyz/deepseek261025.webp'
 ---
 
 
-![](https://static.wyclab.com/20260424233837491260424.webp)
+![](https://static.667667.xyz/20260424233837491260424.webp)
 
 传闻中的DeepSeek V4模型终于来了。
 
@@ -38,13 +38,13 @@ cover: 'https://static.wyclab.com/deepseek261025.webp'
 
 在2026年3月，斯坦福做了一个《The 2026 AI Index Report》（翻译为：2026年AI指数报告），其中有两个图我放一下：
 
-![image-20260424231214529](https://static.wyclab.com/image-20260424231214529260424.webp)
+![image-20260424231214529](https://static.667667.xyz/image-20260424231214529260424.webp)
 
 第一个图是中美模型的对比，横轴是时间，从2023年5月至2026年1月，蓝色是美国，紫色是中国。评分标准是Arena（**Arena评分是一种通过“盲测对战+人类投票”来给大模型排名的评估体系**， 是目前大模型领域最权威的“民间排行榜”）。我个人认为这个曲线图是有价值且真实的，可以看到中美差距最近的点就是2025年1月DeepSeek-R1深度思考模型诞生的时候，之后阿里千问、字节的模型更强，但是较同期的美国模型，差距在变大。
 
 
 
-![image-20260424231721518](https://static.wyclab.com/image-20260424231721518260424.webp)
+![image-20260424231721518](https://static.667667.xyz/image-20260424231721518260424.webp)
 
 第二个图是闭源模型和开源模型的对比，和上图一样，横轴是时间，蓝色是闭源，紫色是开源。数据截止到2026年1月。和上图的中美对比基本一致。差异在于后面比较强的字节模型没有开源。我个人认为这个曲线图也是有价值的，在我个人对豆包、千问、Gemini等模型使用中，美国的闭源模型就是更胜一筹。
 
@@ -62,4 +62,4 @@ cover: 'https://static.wyclab.com/deepseek261025.webp'
 
 
 
-![kanenori-mountain-6320288_1920](https://static.wyclab.com/kanenori-mountain-6320288_1920260424.webp)
+![kanenori-mountain-6320288_1920](https://static.667667.xyz/kanenori-mountain-6320288_1920260424.webp)

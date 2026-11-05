@@ -7,7 +7,7 @@ categories:
 tags:
 - 建站笔记
 - 腾讯云
-cover: 'https://static.wyclab.com/1792915429460261025.jpeg'
+cover: 'https://static.667667.xyz/1792915429460261025.jpeg'
 ---
 
 
@@ -23,13 +23,13 @@ cover: 'https://static.wyclab.com/1792915429460261025.jpeg'
 
 打开EdgeOne的规则引擎界面，果然看到了针对WP预设的缓存规则：根据文件后缀判断缓存规则和缓存事件，同时对管理后台等路径设置为不缓存、直接访问源站。
 
-![image-20260420214544337](https://static.wyclab.com/image-20260420214544337.webp)
+![image-20260420214544337](https://static.667667.xyz/image-20260420214544337.webp)
 
 这个默认的设置针对公开访问的WP站点没有任何问题，但是对于我这种隐私照片是不妥的。
 
 修复的方式也非常简单，核心是要将**身份验证逻辑延伸到边缘节点**。根据AI的提示， WordPress 的登录 Cookie 带有随机 Hash（例如 `wordpress_logged_in_xxxxxx`），因此可以通过在CDN/边缘云加速中设置拦截规则，判断用户是否登陆，如果不包含上述字段，则直接返回403拒绝访问。以腾讯云EdgeOne为例，增加如下的判断-执行逻辑：
 
-![image-20260420214906440](https://static.wyclab.com/image-20260420214906440.webp)
+![image-20260420214906440](https://static.667667.xyz/image-20260420214906440.webp)
 
 **1.设置匹配条件（必须同时满足以下两项）：**
 

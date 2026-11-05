@@ -7,7 +7,7 @@ categories:
 tags:
 - AI
 - 谷歌
-cover: 'https://static.wyclab.com/gemma-4_blog_keyword_meta-dark.width-1300260607.png'
+cover: 'https://static.667667.xyz/gemma-4_blog_keyword_meta-dark.width-1300260607.png'
 ---
 
 
@@ -31,13 +31,13 @@ cover: 'https://static.wyclab.com/gemma-4_blog_keyword_meta-dark.width-130026060
 
 在LM-studio中一键安装Gemma4-12B，小白傻瓜式。安装好后就可以使用了。
 
-![image-20260607212315331](https://static.wyclab.com/image-20260607212315331260607.png)
+![image-20260607212315331](https://static.667667.xyz/image-20260607212315331260607.png)
 
 ### 3. 内存占用实测
 
 实测MacBook Air M5 16GB，上下文开不到256K，只能开到25K左右，内存占用大约10GB左右。对话时GPU占用是100%。
 
-![image-20260607212859660](https://static.wyclab.com/image-20260607212859660260607.png)
+![image-20260607212859660](https://static.667667.xyz/image-20260607212859660260607.png)
 
 ## 开始使用
 
@@ -47,20 +47,20 @@ cover: 'https://static.wyclab.com/gemma-4_blog_keyword_meta-dark.width-130026060
 
 提示词：翻译成中文
 
-![image-20260607211012423](https://static.wyclab.com/image-20260607211012423260607.png)
+![image-20260607211012423](https://static.667667.xyz/image-20260607211012423260607.png)
 
 ### 2. ocr助理
 
 提示词：ocr
 
-![image-20260607210855843](https://static.wyclab.com/image-20260607210855843260607.png)
+![image-20260607210855843](https://static.667667.xyz/image-20260607210855843260607.png)
 
 ### 3. 制表助理
 
 提示词：将上述内容做成表格
 
-![image-20260607210929545](https://static.wyclab.com/image-20260607210929545260607.png)
+![image-20260607210929545](https://static.667667.xyz/image-20260607210929545260607.png)
 
 ### 4. 写作/code助理
 
-![image-20260607213229913](https://static.wyclab.com/image-20260607213229913260607.png)
+![image-20260607213229913](https://static.667667.xyz/image-20260607213229913260607.png)

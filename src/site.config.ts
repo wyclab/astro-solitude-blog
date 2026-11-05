@@ -1,7 +1,7 @@
 import { defineSolitudeConfig } from './lib/config';
 
 export default defineSolitudeConfig({
-  site: 'https://blog.wyclab.com',
+  site: 'https://blog.667667.xyz',
   title: '云川博客',
   description:
     '云川博客，一个普通人的记录',
@@ -36,14 +36,14 @@ export default defineSolitudeConfig({
       use: 'twikoo',
     },
     twikoo: {
-      envId: 'https://twikoo.wyclab.com',
+      envId: 'https://twikoo.667667.xyz',
     },
     nav: {
       group: {
         切换站点: [
           {
             name: '落地页',
-            url: 'https://www.wyclab.com',
+            url: 'https://www.667667.xyz',
             icon: '/img/logo.png',
           },
         ],
@@ -60,19 +60,19 @@ export default defineSolitudeConfig({
           title: '使用AI构建REITs看板',
           url: '/p/reits/',
           cover:
-            'https://static.wyclab.com/2026/10/3399040B-5876-480D-B3C1-7A5CEEC40D52_1_105_c-mvv3o75h-cd9465.jpeg',
+            'https://static.667667.xyz/2026/10/3399040B-5876-480D-B3C1-7A5CEEC40D52_1_105_c-mvv3o75h-cd9465.jpeg',
           label: '科技',
         },
         {
           title: '降本增效：更换域名至XYZ后缀',
           url: '/p/xyz/',
-          cover: 'https://static.wyclab.com/comtoxyz261025.png',
+          cover: 'https://static.667667.xyz/comtoxyz261025.png',
           label: '建站',
         },
         {
           title: '舍与得',
           url: '/p/sheyude/',
-          cover: 'https://static.wyclab.com/1792909876594261025.jpeg',
+          cover: 'https://static.667667.xyz/1792909876594261025.jpeg',
           label: '生活',
         },
         {
@@ -84,7 +84,7 @@ export default defineSolitudeConfig({
         {
           title: '人生的二叉树理论和复利理论',
           url: '/p/shijiuchennianhua/',
-          cover: 'https://static.wyclab.com/1792908944289261025.jpeg',
+          cover: 'https://static.667667.xyz/1792908944289261025.jpeg',
           label: '生活',
         },
       ],

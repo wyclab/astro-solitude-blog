@@ -6,7 +6,7 @@ categories:
 tags:
 - 感悟
 - 人生
-cover: 'https://static.wyclab.com/1792908944289261025.jpeg'
+cover: 'https://static.667667.xyz/1792908944289261025.jpeg'
 ---
 
 

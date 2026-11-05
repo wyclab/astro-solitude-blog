@@ -29,7 +29,7 @@ tags:
 
 9. 次级贷款：次级抵押贷款（subprime mortgage loan）。美国抵押贷款市场以借款人信用条件划分“次级”及“优惠级”。信用低的人申请不到优惠贷款，只能在次级市场寻求贷款，次级市场贷款利率通常比优惠级高2%～3%。
 
-   ![image](https://static.wyclab.com/image260425.webp)
+   ![image](https://static.667667.xyz/image260425.webp)
 
 10. AIG 美国国际集团，保险及金融服务，在2008年经济危机中收为国有。
 
@@ -93,9 +93,9 @@ tags:
 
     > A government-sponsored enterprise (GSE) is a financial services corporation created by the United States Congress. Their intended function is to enhance the flow of credit to targeted sectors of the economy and to make those segments of the capital market more efficient and transparent, and to reduce the risk to investors and other suppliers of capital「来自维基百科」
 
-![](https://static.wyclab.com/image1260425.webp)
+![](https://static.667667.xyz/image1260425.webp)
 
-![](https://static.wyclab.com/image2260425.webp)
+![](https://static.667667.xyz/image2260425.webp)
 
 40. 联邦存款保险公司 （Federal Deposit Insurance Corporation，简称FDIC）是美国国会建立的独立的联邦政府机构，通过为存款提供保险、检查和监督金融机构以及接管倒闭机构，来维持美国金融体系的稳定性和公众信心。
 

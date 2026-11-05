@@ -6,7 +6,7 @@ categories:
 tags:
 - 感悟
 - 工作
-cover: 'https://static.wyclab.com/1792909876594261025.jpeg'
+cover: 'https://static.667667.xyz/1792909876594261025.jpeg'
 ---
 
 

@@ -7,7 +7,7 @@ tags:
 - AI
 - 经济
 - VibeCoding
-cover: 'https://static.wyclab.com/2026/10/3399040B-5876-480D-B3C1-7A5CEEC40D52_1_105_c-mvv3o75h-cd9465.jpeg'
+cover: 'https://static.667667.xyz/2026/10/3399040B-5876-480D-B3C1-7A5CEEC40D52_1_105_c-mvv3o75h-cd9465.jpeg'
 ---
 
 > 公募REITs的底层资产信息透明度很高，可以利用公告信息，整理不同底层资产在不同区域的运营情况。
@@ -53,7 +53,7 @@ AI时代并不需要掌握爬虫技术，但最好给AI更清楚的数据来源�
 
 > 根据此前整理的产业园区REITs清单及指标体系，从深交所（https://www.szse.cn/market/product/list/reits/index.html） 和上交所（https://www.sse.com.cn/reits/announcements/info/） 的公告中爬取对应REITs的定期报告，仅采集标题为“xx年第x季度报告”“xx年年度报告”“xx年中期报告”的文件，忽略临时公告、招募说明书及其他报告。时间范围为2020年1月至今。对每份报告提取指标体系中各项指标数据，标注报告类型、所属报告期及数据来源链接，并按原有指标体系结构入库，完善指标体系数据库；同时说明缺失或无法获取的指标项。
 
-![workbuddy](https://static.wyclab.com/image-20261030213644685261030.png)
+![workbuddy](https://static.667667.xyz/image-20261030213644685261030.png)
 
 
 
@@ -63,7 +63,7 @@ AI时代并不需要掌握爬虫技术，但最好给AI更清楚的数据来源�
 
 > 我现在要基于这些数据库，搭建一个网站，纯静态，这是我的网站https://xxx.com/ ，保持风格色调一致。 未来的网址是xxx.xxx.com，菜单栏分别是首页（首页是中国地图）、底层资产列表、省份表现。首页地图可以清晰展示不同产业园在国内的地理分布，同时地图上有省界限，点击可以进入省份表现。底层资产列表列出每个底层资产的本期表现，点进去可以查看该底层资产的趋势。 省份表现可以列出该省份底层资产的本期表现，点进去可以查看该省份的趋势。 要求风格简洁美观。
 
-![workbuddy](https://static.wyclab.com/123wb261031.png)
+![workbuddy](https://static.667667.xyz/123wb261031.png)
 
 ### 5.部署到腾讯云Edgeone
 
@@ -77,4 +77,4 @@ AI时代并不需要掌握爬虫技术，但最好给AI更清楚的数据来源�
 
 ### 2026.10.31 V1
 
-初次上线：[https://reits.wyclab.com](https://reits.wyclab.com)
+初次上线：[https://reits.667667.xyz](https://reits.667667.xyz)

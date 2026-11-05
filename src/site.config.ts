@@ -43,7 +43,7 @@ export default defineSolitudeConfig({
         切换站点: [
           {
             name: '落地页',
-            url: 'https://www.667667.xyz',
+            url: 'https://667667.xyz',
             icon: '/img/logo.png',
           },
         ],

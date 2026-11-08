@@ -145,5 +145,11 @@ export default defineSolitudeConfig({
     },
     search: { tags: ['股票', '经济', '日记'], local: { preload: true } },
     pwa: { enable: true },
+    extends: {
+      head: [
+        // Umami 自建统计（自带 SPA 路由跟踪，无需额外补发）
+        `<script defer src="https://log.667667.xyz/script.js" data-website-id="e53335ba-a5c6-449e-9ad8-1050b20810d2"></script>`,
+      ],
+    },
   },
 });

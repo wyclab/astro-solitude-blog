@@ -8,6 +8,7 @@ tags:
 - 会计
 - 错题本
 slug: cpa-mistakes
+cover: 'https://static.667667.xyz/2026/2026-11-08-b88610.jpeg'
 description: '记录 CPA 备考中做错的题目、正确答案与考点复盘。'
 ---
 

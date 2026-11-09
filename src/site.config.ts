@@ -110,6 +110,7 @@ export default defineSolitudeConfig({
     },
     footer: {
       information: {
+        author: '/img/favicon.svg',
         left: [
           {
             name: 'GitHub',
@@ -147,7 +148,7 @@ export default defineSolitudeConfig({
     search: { tags: ['股票', '经济', '日记'], local: { preload: true } },
     pwa: {
       enable: true,
-      theme_color: '#4575ff',
+      theme_color: '#1296db',
       apple_touch_icon: '/img/pwa/apple-touch-icon.png',
     },
     extends: {

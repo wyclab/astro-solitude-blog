@@ -29,7 +29,7 @@ export default defineSolitudeConfig({
     },
   ],
   theme: {
-    site: { name: { custom: '云川博客' } },
+    site: { name: { custom: '云川博客' }, icon: '/img/favicon.svg' },
     lightbox: 'fancybox',
     // 评论系统：Twikoo
     comment: {
@@ -95,6 +95,7 @@ export default defineSolitudeConfig({
       page: { noSticky: 'about', Sticky: 'newestPost,allInfo' },
       tag: { noSticky: '', Sticky: 'allInfo' },
       my_card: {
+        author: { img: '/img/avatar.png' },
         description: '望云川',
         content: '凭栏望云，渡川而行',
         witty_words: ['生活本不完美，幸甚有记录', 'Stay hungry, stay foolish'],
@@ -144,7 +145,11 @@ export default defineSolitudeConfig({
       ],
     },
     search: { tags: ['股票', '经济', '日记'], local: { preload: true } },
-    pwa: { enable: true },
+    pwa: {
+      enable: true,
+      theme_color: '#4575ff',
+      apple_touch_icon: '/img/pwa/apple-touch-icon.png',
+    },
     extends: {
       head: [
         // Umami 自建统计（自带 SPA 路由跟踪，无需额外补发）

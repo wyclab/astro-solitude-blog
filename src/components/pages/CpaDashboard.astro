@@ -17,6 +17,7 @@ const rawData = data as {
   listen?: Record<string, number>;
   daily?: Record<string, number>;
   practice?: Record<string, number>;
+  practiceCount?: number;
 };
 // 兼容旧字段 daily（等同听课时长）
 const listen: Record<string, number> = {
@@ -24,6 +25,7 @@ const listen: Record<string, number> = {
   ...(rawData.listen ?? {}),
 };
 const practice: Record<string, number> = rawData.practice ?? {};
+const practiceCount = rawData.practiceCount ?? 0;
 const keys = [...new Set([...Object.keys(listen), ...Object.keys(practice)])].sort();
 const refMs = keys.length
   ? Date.parse(`${keys[keys.length - 1]}T00:00:00Z`)
@@ -158,49 +160,6 @@ const quarterCurrent = quarterTotals[currentQuarter] ?? 0;
 const quarterPrevious = quarterTotals[previousQuarter] ?? 0;
 const quarterMax = Math.max(60, ...last4Quarters.map((q) => q.minutes));
 const quarterScale = Math.ceil(quarterMax / 60) * 60;
-
-/* ---- 热力图（近 12 周，周一为一列起点） ---- */
-const heatWeeksCount = 18;
-const refDow = (new Date(refMs).getUTCDay() + 6) % 7;
-const lastMondayMs = refMs - refDow * DAY;
-const heatStartMs = lastMondayMs - (heatWeeksCount - 1) * 7 * DAY;
-const heatWeeks = Array.from({ length: heatWeeksCount }, (_, w) =>
-  Array.from({ length: 7 }, (_, d) => {
-    const ms = heatStartMs + (w * 7 + d) * DAY;
-    const key = isoOf(ms);
-    return {
-      key,
-      label: shortDate(key),
-      listen: listenOf(key),
-      practice: practiceOf(key),
-      study: studyOf(key),
-      future: ms > refMs,
-    };
-  }),
-);
-const heatLevel = (minutes: number) =>
-  minutes <= 0 ? 0 : minutes <= 30 ? 1 : minutes <= 60 ? 2 : minutes <= 120 ? 3 : 4;
-const heatCells = heatWeeks.flat();
-const heatPastDays = heatCells.filter((d) => !d.future).length;
-const heatDays = heatCells.filter((d) => d.study > 0).length;
-const heatMinutes = heatCells.reduce((sum, d) => sum + d.study, 0);
-const heatMiss = heatCells.filter(
-  (d) => !d.future && Date.parse(`${d.key}T00:00:00Z`) >= firstMs && d.study === 0,
-).length;
-const heatRange = `${shortDate(isoOf(heatStartMs))} – ${shortDate(ref)}`;
-
-/* ---- 最长连续学习 ---- */
-let maxStreak = 0;
-{
-  let run = 0;
-  const daysTotal = Math.round((refMs - firstMs) / DAY) + 1;
-  for (let i = 0; i < daysTotal; i++) {
-    if (studyOf(isoOf(firstMs + i * DAY)) > 0) {
-      run += 1;
-      if (run > maxStreak) maxStreak = run;
-    } else run = 0;
-  }
-}
 
 /* ---- 倒计时 ---- */
 const exam = data.exam;
@@ -413,7 +372,16 @@ const statusText: Record<string, string> = {
       <div class="cpa-card-head">
         <h2><i class="solitude fas fa-hourglass-half" aria-hidden="true"></i>累计学习时长</h2>
       </div>
-      <p class="cpa-total-value">{hours(totalStudy)}<span>小时</span></p>
+      <div class="cpa-total-figures">
+        <div class="cpa-total-figure">
+          <span class="cpa-total-label">学习时长</span>
+          <p class="cpa-total-value">{hours(totalStudy)}<span>小时</span></p>
+        </div>
+        <div class="cpa-total-figure is-practice">
+          <span class="cpa-total-label">做题个数</span>
+          <p class="cpa-total-value">{practiceCount}<span>题</span></p>
+        </div>
+      </div>
       <p class="cpa-total-sub">听课 {hours(totalListen)} 小时 + 做题 {hours(totalPractice)} 小时 · 平均每天 {avgStudy} 分钟</p>
       <ul class="cpa-total-list">
         <li><span>本周学习</span><strong>{hours(weekStudy)} 小时</strong></li>
@@ -426,83 +394,29 @@ const statusText: Record<string, string> = {
     </section>
   </div>
 
-  <div class="cpa-grid cpa-grid--even">
-    <section class="cpa-card cpa-heat">
-      <div class="cpa-card-head">
-        <h2><i class="solitude fas fa-fire" aria-hidden="true"></i>学习热力图</h2>
-        <span class="cpa-chip">近 18 周</span>
+  <section class="cpa-card cpa-countdown">
+    <div class="cpa-card-head">
+      <h2><i class="solitude fas fa-hourglass-end" aria-hidden="true"></i>考试倒计时</h2>
+      <span class="cpa-chip">{exam.label}</span>
+    </div>
+    <p class="cpa-count-value">{examDays}<span>天</span></p>
+    <p class="cpa-count-sub">距 {examLabel}（{exam.note}）</p>
+    <div class="cpa-count-progress">
+      <div class="cpa-plan-progress-head">
+        <span>备考时间进度</span>
+        <strong>{prepPercent}%</strong>
       </div>
-      <div class="cpa-heat-body">
-        <div class="cpa-heat-chart">
-          <div class="cpa-heat-grid">
-            <div class="cpa-heat-weekdays" aria-hidden="true">
-              <span>一</span><span></span><span>三</span><span></span><span>五</span><span></span><span>日</span>
-            </div>
-            {heatWeeks.map((week) => (
-              <div class="cpa-heat-col">
-                {week.map((day) => (
-                  <div
-                    class:list={[
-                      'cpa-heat-cell',
-                      `is-l${heatLevel(day.study)}`,
-                      { 'is-future': day.future, 'is-today': day.key === ref },
-                    ]}
-                    data-tip={
-                      day.future
-                        ? `${day.label} · 未到`
-                        : `${day.label} · 听课 ${day.listen} 分 · 做题 ${day.practice} 分`
-                    }
-                  />
-                ))}
-              </div>
-            ))}
-          </div>
-          <div class="cpa-heat-foot">
-            <span>{heatRange}</span>
-            <ul class="cpa-heat-legend" aria-hidden="true">
-              <li>少</li>
-              <li class="cpa-heat-cell is-l0" />
-              <li class="cpa-heat-cell is-l1" />
-              <li class="cpa-heat-cell is-l2" />
-              <li class="cpa-heat-cell is-l3" />
-              <li class="cpa-heat-cell is-l4" />
-              <li>多</li>
-            </ul>
-          </div>
-        </div>
-        <ul class="cpa-heat-stats">
-          <li><span>学习天数</span><strong>{heatDays} 天</strong></li>
-          <li><span>热力图时长</span><strong>{hours(heatMinutes)} 小时</strong></li>
-          <li><span>最长连续</span><strong>{maxStreak} 天</strong></li>
-          <li><span>空档</span><strong>{heatMiss} 天</strong></li>
-        </ul>
+      <div class="cpa-progress" role="img" aria-label={`备考时间进度 ${prepPercent}%`}>
+        <span style={`width:${prepPercent}%`} />
       </div>
-    </section>
-
-    <section class="cpa-card cpa-countdown">
-      <div class="cpa-card-head">
-        <h2><i class="solitude fas fa-hourglass-end" aria-hidden="true"></i>考试倒计时</h2>
-        <span class="cpa-chip">{exam.label}</span>
-      </div>
-      <p class="cpa-count-value">{examDays}<span>天</span></p>
-      <p class="cpa-count-sub">距 {examLabel}（{exam.note}）</p>
-      <div class="cpa-count-progress">
-        <div class="cpa-plan-progress-head">
-          <span>备考时间进度</span>
-          <strong>{prepPercent}%</strong>
-        </div>
-        <div class="cpa-progress" role="img" aria-label={`备考时间进度 ${prepPercent}%`}>
-          <span style={`width:${prepPercent}%`} />
-        </div>
-      </div>
-      <ul class="cpa-count-list">
-        <li><span>已备考</span><strong>{prepDays} 天</strong></li>
-        <li><span>剩余</span><strong>{Math.max(0, prepTotalDays - prepDays)} 天</strong></li>
-        <li><span>距挑战收官</span><strong>{endDays} 天</strong></li>
-        <li><span>已通过科目</span><strong>{passedCount} / {subjects.length}</strong></li>
-      </ul>
-    </section>
-  </div>
+    </div>
+    <ul class="cpa-count-list">
+      <li><span>已备考</span><strong>{prepDays} 天</strong></li>
+      <li><span>剩余</span><strong>{Math.max(0, prepTotalDays - prepDays)} 天</strong></li>
+      <li><span>距挑战收官</span><strong>{endDays} 天</strong></li>
+      <li><span>已通过科目</span><strong>{passedCount} / {subjects.length}</strong></li>
+    </ul>
+  </section>
 
   <section class="cpa-card cpa-compare">
     <div class="cpa-card-head">

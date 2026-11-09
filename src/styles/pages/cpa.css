@@ -1,4 +1,4 @@
-/* CPA 学习看板：卡片、图表、热力图与错题详情，全部沿用主题令牌。 */
+/* CPA 学习看板：卡片、图表与错题详情，全部沿用主题令牌。 */
 body[data-type='cpa'] #page {
   padding: 0;
   background: transparent;
@@ -538,8 +538,7 @@ body[data-type='cpa'] #page {
 }
 
 .cpa-bar-stack[data-tip]:hover::after,
-.cpa-mini-bar[data-tip]:hover::after,
-.cpa-heat-cell[data-tip]:hover::after {
+.cpa-mini-bar[data-tip]:hover::after {
   content: attr(data-tip);
   position: absolute;
   bottom: calc(100% + 6px);
@@ -598,11 +597,32 @@ body[data-type='cpa'] #page {
   flex-direction: column;
 }
 
+.cpa-total-figures {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px 24px;
+  margin: 6px 0 0;
+}
+
+.cpa-total-figure {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.cpa-total-label {
+  font-size: 12px;
+  line-height: 1.2;
+  color: var(--efu-secondtext);
+}
+
 .cpa-total-value {
   display: flex;
   align-items: baseline;
   gap: 6px;
-  margin: 4px 0 0;
+  margin: 0;
   font-size: 52px;
   font-weight: 700;
   line-height: 1;
@@ -614,6 +634,10 @@ body[data-type='cpa'] #page {
   font-size: 15px;
   font-weight: 400;
   color: var(--efu-secondtext);
+}
+
+.cpa-total-figure.is-practice .cpa-total-value {
+  color: var(--cpa-practice);
 }
 
 .cpa-total-sub {
@@ -647,139 +671,6 @@ body[data-type='cpa'] #page {
 
 .cpa-total-list strong {
   font-size: 15px;
-  font-weight: 700;
-  color: var(--efu-fontcolor);
-  font-variant-numeric: tabular-nums;
-}
-
-/* ---------- 热力图 ---------- */
-.cpa-heat {
-  --heat-cell: 16px;
-  --heat-gap: 5px;
-}
-
-.cpa-heat-body {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 24px;
-  flex-wrap: wrap;
-}
-
-.cpa-heat-chart {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  min-width: 0;
-}
-
-.cpa-heat-grid {
-  display: flex;
-  gap: var(--heat-gap);
-}
-
-.cpa-heat-weekdays {
-  display: flex;
-  flex-direction: column;
-  gap: var(--heat-gap);
-  margin-right: 2px;
-}
-
-.cpa-heat-weekdays span {
-  width: 12px;
-  height: var(--heat-cell);
-  font-size: 10px;
-  line-height: var(--heat-cell);
-  color: var(--efu-secondtext);
-  text-align: right;
-}
-
-.cpa-heat-col {
-  display: flex;
-  flex-direction: column;
-  gap: var(--heat-gap);
-}
-
-.cpa-heat-cell {
-  position: relative;
-  width: var(--heat-cell);
-  height: var(--heat-cell);
-  border-radius: 3px;
-  background: var(--efu-secondbg);
-}
-
-.cpa-heat-cell.is-l1 {
-  background: color-mix(in srgb, var(--efu-main) 25%, var(--efu-secondbg));
-}
-
-.cpa-heat-cell.is-l2 {
-  background: color-mix(in srgb, var(--efu-main) 50%, var(--efu-secondbg));
-}
-
-.cpa-heat-cell.is-l3 {
-  background: color-mix(in srgb, var(--efu-main) 75%, var(--efu-secondbg));
-}
-
-.cpa-heat-cell.is-l4 {
-  background: var(--efu-main);
-}
-
-.cpa-heat-cell.is-future {
-  background: transparent;
-  box-shadow: inset 0 0 0 1px var(--efu-card-border);
-}
-
-.cpa-heat-cell.is-today {
-  box-shadow: 0 0 0 1px var(--efu-fontcolor);
-}
-
-.cpa-heat-foot {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  flex-wrap: wrap;
-  font-size: 11px;
-  color: var(--efu-secondtext);
-  font-variant-numeric: tabular-nums;
-}
-
-.cpa-heat-legend {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.cpa-heat-legend li {
-  font-size: 10px;
-  line-height: 1;
-}
-
-.cpa-heat-stats {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(78px, 1fr));
-  gap: 12px 18px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.cpa-heat-stats li {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.cpa-heat-stats span {
-  font-size: 12px;
-  color: var(--efu-secondtext);
-}
-
-.cpa-heat-stats strong {
-  font-size: 16px;
   font-weight: 700;
   color: var(--efu-fontcolor);
   font-variant-numeric: tabular-nums;
@@ -823,8 +714,8 @@ body[data-type='cpa'] #page {
 
 .cpa-count-list {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px 20px;
   margin: 16px 0 0;
   padding: 14px 0 0;
   border-top: 1px dashed var(--efu-card-border);
@@ -1402,15 +1293,67 @@ a.cpa-mistakes-total:focus-visible {
   font-family: var(--efu-code-font-family);
 }
 
+/* 倒计时独占整行时，数值与进度左右分栏，避免右侧留白 */
+@media screen and (min-width: 1025px) {
+  .cpa-countdown {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    align-items: start;
+    column-gap: 40px;
+    row-gap: 6px;
+  }
+
+  .cpa-countdown .cpa-card-head,
+  .cpa-count-list {
+    grid-column: 1 / -1;
+  }
+
+  .cpa-count-value,
+  .cpa-count-sub {
+    grid-column: 1;
+  }
+
+  .cpa-count-progress {
+    grid-column: 2;
+    grid-row: 2 / span 2;
+    margin-top: 0;
+    padding-top: 8px;
+  }
+}
+
+/* 倒计时独占整行时，数值与进度左右分栏，避免右侧留白 */
+@media screen and (min-width: 1025px) {
+  .cpa-countdown {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    align-items: start;
+    column-gap: 40px;
+    row-gap: 6px;
+  }
+
+  .cpa-countdown .cpa-card-head,
+  .cpa-count-list {
+    grid-column: 1 / -1;
+  }
+
+  .cpa-count-value,
+  .cpa-count-sub {
+    grid-column: 1;
+  }
+
+  .cpa-count-progress {
+    grid-column: 2;
+    grid-row: 2 / span 2;
+    margin-top: 0;
+    padding-top: 8px;
+  }
+}
+
 /* ---------- 响应式 ---------- */
 @media screen and (max-width: 1024px) {
   .cpa-grid,
   .cpa-mistakes-grid {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .cpa-heat-body {
-    gap: 20px;
   }
 
   .cpa-mistakes-side {
@@ -1451,17 +1394,12 @@ a.cpa-mistakes-total:focus-visible {
     font-size: 42px;
   }
 
-  .cpa-heat {
-    --heat-cell: 13px;
-    --heat-gap: 4px;
-  }
-
-  .cpa-heat-body {
-    gap: 16px;
-  }
-
   .cpa-count-value {
     font-size: 46px;
+  }
+
+  .cpa-count-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .cpa-compare-grid {

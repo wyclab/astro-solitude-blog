@@ -1,31 +1,31 @@
 {
-  "title": "About Solitude",
+  "title": "关于本站",
   "sections": [
     {
       "type": "intro",
-      "greeting": "Hello, welcome to Solitude",
-      "name_prefix": "This is",
-      "name": "Solitude",
-      "description": "An Astro theme for stories and ideas.",
+      "greeting": "欢迎访问",
+      "name_prefix": "望云川",
+      "name": "个人网站",
+      "description": "望云之自在，知川之不息",
       "pursuit": {
-        "label": "Our focus",
+        "label": "网站定位",
         "lines": [
-          "Make room",
-          "for your story"
+          "记录生活",
+          "挥发创意"
         ],
         "rotating_words": [
-          "Fast",
-          "Reliable",
-          "Native",
-          "Extensible"
+          "生活",
+          "科技",
+          "经济",
+          "建站"
         ]
       }
     },
     {
       "type": "skills_career",
       "skills": {
-        "label": "The toolkit",
-        "title": "From words to pages",
+        "label": "工具",
+        "title": "Vibe Coding",
         "items": [
           {
             "name": "Astro",
@@ -33,13 +33,13 @@
             "color": "#ff4088"
           },
           {
-            "name": "Astro Components",
-            "icon": "fas fa-code",
+            "name": "Github",
+            "icon": "fab fa-github",
             "color": "#00add8"
           },
           {
-            "name": "TypeScript",
-            "icon": "fab fa-js",
+            "name": "Openai",
+            "icon": "fab fa-openai",
             "color": "#3178c6"
           },
           {
@@ -90,19 +90,19 @@
         ]
       },
       "career": {
-        "label": "The journey",
-        "title": "Always evolving",
+        "label": "建站历史",
+        "title": "持续迭代",
         "summary": [
           {
-            "name": "2023, Solitude demo",
+            "name": "2018, Wordpress",
             "color": "#425aef"
           },
           {
-            "name": "2026, Native Astro",
+            "name": "2022, halo",
             "color": "#ff4088"
           },
           {
-            "name": "Today, growing together",
+            "name": "Today, astro",
             "color": "#16a34a"
           }
         ],

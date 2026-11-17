@@ -7,7 +7,7 @@ tags:
 - Apple
 - 智能设备
 - 企业
-cover: 'https://static.667667.xyz/2026/2026-11-16-ed0327.jpeg'
+cover: 'https://static.667667.xyz/2026/2026-11-17-fbdb86.jpeg'
 description: '过保的苹果手表还可以以换代修？'
 ---
 

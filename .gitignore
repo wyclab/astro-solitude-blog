@@ -12,3 +12,6 @@ artifacts/
 
 # Temporary pull-request comparison checkout
 .visual-baseline/
+
+# EdgeOne CLI 本地绑定（不入库，否则会把仓库绑到错误的项目）
+.edgeone/

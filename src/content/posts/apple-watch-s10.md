@@ -4,7 +4,7 @@ date: '2026-11-17 22:40'
 categories:
 - 生活
 tags:
-- Apple
+- 苹果
 - 智能设备
 - 企业
 cover: 'https://static.667667.xyz/2026/2026-11-17-fbdb86.jpeg'
@@ -54,8 +54,8 @@ description: '过保的苹果手表还可以以换代修？'
 | 应付金额                                                     | RMB 0     |
 |                                                              |           |
 | Watch Series 10 GPS, 42mm, Aluminum, Jet Black, CI/AR, CN, China (NEW) |           |
-| 替换件序列号: LR4VPFW1K7                                     |           |
-| 项目编号: CH661-43555                                        |           |
+| 替换件序列号: LR4V**                                         |           |
+| 项目编号: CH661-4355*                                        |           |
 | 价格                                                         | RMB 0     |
 | 应付金额                                                     | RMB 0     |
 | 顾客 KBB                                                     |           |

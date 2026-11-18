@@ -6,7 +6,6 @@ categories:
 tags:
 - 家居
 - 健康
-
 cover: 'https://static.667667.xyz/2026/2026-11-18-dnia3q.webp'
 description: '记录更换滤芯的过程，未来每年都要换；省下80块钱上门安装费。'
 ---

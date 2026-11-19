@@ -15,3 +15,11 @@ artifacts/
 
 # EdgeOne CLI 本地绑定（不入库，否则会把仓库绑到错误的项目）
 .edgeone/
+
+# 测试与构建补充产物
+blob-report/
+coverage/
+*.log
+
+# 系统杂项
+Thumbs.db

@@ -17,7 +17,7 @@ cover: 'https://static.667667.xyz/2026/2026-11-19-ecjn2n.webp'
 
 现在传图是：截图 → 拖进浏览器 → 看着体积和尺寸顺眼 → 点上传 → 复制链接，回文章里粘贴。
 
-![Pic 的图片处理页](/img/posts/pic-home.png)
+![Pic 的图片处理页](https://static.667667.xyz/2026/2026-11-19-xm9fh6.webp)
 
 ## 它是什么
 

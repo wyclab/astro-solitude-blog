@@ -11,6 +11,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "deploy": "bash scripts/deploy-1panel.sh",
     "preview": "astro preview",
     "check": "pnpm check:scripts && pnpm check:astro",
     "test": "tsx --test tests/*.test.ts",

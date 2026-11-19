@@ -230,20 +230,58 @@ export const initHomeCenter = () => {
   });
   banners.forEach((item, index) => {
     let pointerType = '';
+    let startX = 0;
+    let startY = 0;
+    let dragged = false;
+    const resetPointer = () => {
+      pointerType = '';
+      dragged = false;
+    };
     lifecycle.listen(
       item,
       'pointerdown',
-      (event) => (pointerType = event.pointerType),
+      (event) => {
+        pointerType = event.pointerType;
+        startX = event.clientX;
+        startY = event.clientY;
+        dragged = false;
+      },
+      true,
+    );
+    lifecycle.listen(
+      item,
+      'pointermove',
+      (event) => {
+        if (pointerType !== 'touch' || dragged) return;
+        if (
+          Math.abs(event.clientX - startX) > 8 ||
+          Math.abs(event.clientY - startY) > 8
+        ) {
+          dragged = true;
+        }
+      },
+      true,
+    );
+    lifecycle.listen(
+      item,
+      'pointercancel',
+      () => {
+        if (pointerType === 'touch') dragged = true;
+      },
       true,
     );
     lifecycle.listen(item, 'click', (event) => {
-      if (pointerType === 'touch' && window.innerWidth <= 768) {
+      const isTouch = pointerType === 'touch' && window.innerWidth <= 768;
+      // 触摸滑动（切换轮播）不应该跳转，只有轻点才进入文章。
+      if (isTouch && dragged) {
         event.preventDefault();
         select(index);
-      } else {
-        navigate(item.dataset.link || '', event);
+        resetPointer();
+        return;
       }
-      pointerType = '';
+      if (isTouch) select(index);
+      navigate(item.dataset.link || '', event);
+      resetPointer();
     });
     lifecycle.listen(item, 'keydown', (event) => {
       if (event.key === 'Enter' || event.key === ' ') {

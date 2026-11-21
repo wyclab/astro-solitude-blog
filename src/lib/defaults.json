@@ -423,7 +423,7 @@
     "aplayer_js": "https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js",
     "meting_js": "https://cdn.jsdelivr.net/npm/meting@2.0.2/dist/Meting.min.js",
     "colorthief": "https://cdn.jsdelivr.net/npm/colorthief@3.4.0/dist/umd/color-thief.global.min.js",
-    "twikoo": "https://cdn.jsdelivr.net/npm/twikoo@1.6.44/dist/twikoo.all.min.js",
+    "twikoo": "https://cdn.jsdelivr.net/npm/twikoo@2.0.13/dist/twikoo.all.min.js",
     "waline_css": "https://cdn.jsdelivr.net/npm/@waline/client@3.6.0/dist/waline.css",
     "waline": "https://cdn.jsdelivr.net/npm/@waline/client@3.6.0/dist/waline.umd.js",
     "valine": "https://cdn.jsdelivr.net/npm/valine@1.5.3/dist/Valine.min.js",

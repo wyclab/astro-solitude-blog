@@ -44,7 +44,12 @@ export default defineSolitudeConfig({
           {
             name: '落地页',
             url: 'https://667667.xyz',
-            icon: '/img/logo.png',
+            icon: '/img/favicon.svg',
+          },
+          {
+            name: '知识库',
+            url: 'https://doc.667667.xyz',
+            icon: '/img/doc.webp',
           },
         ],
       },
